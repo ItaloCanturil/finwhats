@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { expenseTable } from "../_db/schema";
 import db from "../_db/drizzle";
 import { and, eq } from "drizzle-orm";
@@ -8,16 +7,16 @@ interface ExpenseParams {
     amount: number;
 }
 export class TransactionService {
-    async processWebRequest (params: ExpenseParams) {
-        const { userId } = await auth();
+    async processWebRequest(params: ExpenseParams) {
+        const { userId } = await getServerSession();
 
         if (!userId) {
             throw new Error("Unauthorized");
         }
     }
 
-    async addExpense (params: ExpenseParams) {
-        const { userId } = await auth();
+    async addExpense(params: ExpenseParams) {
+        const { userId } = await getServerSession();
         if (!userId) {
             throw new Error("Unauthorized");
         }
@@ -27,12 +26,12 @@ export class TransactionService {
             .values({ ...params, amount: params.amount.toString(), user_id: userId });
     }
 
-    async removeExpense  (params: ExpenseParams) {
-        const { userId } = await auth();
+    async removeExpense(params: ExpenseParams) {
+        const { userId } = await getServerSession();
         if (!userId) {
             throw new Error("Unauthorized");
         }
-    
+
         await db
             .delete(expenseTable)
             .where(
@@ -44,8 +43,8 @@ export class TransactionService {
             );
     };
 
-    async getExpenses () {
-        const { userId } = await auth();
+    async getExpenses() {
+        const { userId } = await getServerSession();
         if (!userId) {
             throw new Error("Unauthorized");
         }

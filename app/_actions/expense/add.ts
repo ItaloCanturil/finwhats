@@ -1,6 +1,5 @@
 import db from "@/app/_db/drizzle";
 import { expenseTable } from "@/app/_db/schema";
-import { auth } from "@clerk/nextjs/server";
 
 interface AddExpenseParams {
 	category: string;
@@ -8,7 +7,7 @@ interface AddExpenseParams {
 }
 
 export const addExpense = async (params: AddExpenseParams) => {
-	const { userId } = await auth();
+	const { userId } = await getServerSession();
 	if (!userId) {
 		throw new Error("Unauthorized");
 	}
