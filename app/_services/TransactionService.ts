@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
-import { expenseTable } from "../_db/schema";
-import db from "../_db/drizzle";
+import { expenseTable } from "@/db/schema";
+import db from "@/db/drizzle";
 import { and, eq } from "drizzle-orm";
 
 interface ExpenseParams {

@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ConnectWhatsappModal } from "./components/ConnectWhatsappModal";
+import { ConnectWhatsappModal } from "@/components/ConnectWhatsappModal";
 
 export default async function Home() {
 	const { userId } = await auth();
