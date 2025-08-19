@@ -4,10 +4,10 @@ import Link from "next/link";
 import { ConnectWhatsappModal } from "@/components/ConnectWhatsappModal";
 
 export default async function Home() {
-	const { userId } = await auth();
-	if (!userId) {
-		redirect("/login");
-	}
+	// const { userId } = await auth();
+	// if (!userId) {
+	// 	redirect("/login");
+	// }
 
 	return (
 		<main className="min-h-screen flex flex-col items-center justify-center gap-6 p-4">
@@ -16,8 +16,7 @@ export default async function Home() {
 				Manage your finances easily through WhatsApp messages
 			</p>
 			<div className="flex flex-col gap-4 w-full max-w-xs">
-
-				<ConnectWhatsappModal/>
+				<ConnectWhatsappModal />
 				<Link
 					href="/dashboard"
 					className="bg-blue-500 text-white py-3 px-6 rounded-lg text-center hover:bg-blue-600 transition-colors"

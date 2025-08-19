@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import * as p from "drizzle-orm/pg-core";
 
 export const subscriptionStatusEnum = p.pgEnum("status", [
@@ -23,6 +24,22 @@ export const expenseTable = p.pgTable("expenses", {
 	created_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
 });
 
+export const expenseCategories = p.pgTable("expense_categories", {
+	id: p.uuid().defaultRandom().primaryKey().notNull(),
+	name: p.text("name").notNull(),
+});
+
+export const expenseCategoryRelations = relations(expenseCategories, ({ many }) => ({
+	expenses: many(expenseTable),
+}));
+
+export const expenseRelations = relations(expenseTable, ({ one }) => ({
+	category: one(expenseCategories, {
+		fields: [expenseTable.category],
+		references: [expenseCategories.name],
+	}),
+}));
+
 export const goalsTable = p.pgTable("goals", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
 	user_id: p.uuid().references(() => usersTable.id),
@@ -31,11 +48,31 @@ export const goalsTable = p.pgTable("goals", {
 	created_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
 });
 
+export const goalRelations = relations(goalsTable, ({ one }) => ({
+	user: one(usersTable, {
+		fields: [goalsTable.user_id],
+		references: [usersTable.id],
+	}),
+}));
+
+export const subscriptionPeriodEnum = p.pgEnum("period", [
+	"monthly",
+	"annual",
+]);
+
 export const subscriptions = p.pgTable("subscriptions", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
 	user_id: p.uuid().references(() => usersTable.id),
 	stripe_subscription_id: p.text().unique(),
 	status: subscriptionStatusEnum("status").notNull(),
+	period: subscriptionPeriodEnum("period").notNull(),
 	updated_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
 	created_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
 });
+
+export const userRelations = relations(usersTable, ({ many }) => ({
+	subscriptions: many(subscriptions),
+	expenses: many(expenseTable),
+	goals: many(goalsTable),
+	expenseCategories: many(expenseCategories),
+}));

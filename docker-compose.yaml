@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   evolution-api:
-    image: atendai/evolution-api:2.3.1
+    image: atendai/evolution-api:v2.2.3
     container_name: evolution-api
     ports:
       - "8080:8080"

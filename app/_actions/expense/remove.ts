@@ -1,6 +1,5 @@
 import db from "@/app/_db/drizzle";
 import { expenseTable } from "@/app/_db/schema";
-import { auth } from "@clerk/nextjs/server";
 import { eq, and } from "drizzle-orm";
 
 interface RemoveExpenseParams {
@@ -9,7 +8,6 @@ interface RemoveExpenseParams {
 }
 
 export const removeExpense = async (params: RemoveExpenseParams) => {
-	const { userId } = await auth();
 	if (!userId) {
 		throw new Error("Unauthorized");
 	}
