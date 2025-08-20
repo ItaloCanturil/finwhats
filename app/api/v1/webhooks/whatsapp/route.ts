@@ -1,3 +1,7 @@
+import sendWhatsAppMessage from "@/_lib/whatsappSender";
+import db from "@/db/drizzle";
+import { usersTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
     if (request.method !== "POST") {
@@ -15,6 +19,15 @@ export async function POST(request: Request) {
         const body = await request.json();
 
         // const senderNumber = body?.
+
+        const potentialUser = await db.select().from(usersTable).where(
+            eq(usersTable.phone, body?.senderNumber),
+        );
+
+        if (!potentialUser[0]) {
+            await sendWhatsAppMessage(body?.senderNumber, `Usuário não encontrado, crie o login pelo site ${process.env.SITE_URL}`);
+            return new Response("User not found", { status: 404 });
+        }
 
         console.log('✅ WhatsApp Webhook Received!');
         console.log(body);

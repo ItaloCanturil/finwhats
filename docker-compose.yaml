@@ -1,9 +1,7 @@
-version: "3.9"
-
 services:
   evolution-api:
-    image: atendai/evolution-api:v2.2.3
     container_name: evolution-api
+    image: atendai/evolution-api:v2.2.3
     ports:
       - "8080:8080"
     env_file:

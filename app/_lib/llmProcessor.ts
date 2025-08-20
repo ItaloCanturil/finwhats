@@ -69,106 +69,93 @@ const createLlmPrompt = (userMessage: string) => {
 };
 
 const tools = [
-    {
+	{
 		intent: 'add_expense',
-        type: 'function',
-        function: {
-            name: 'add_expense',
-            description: 'Add an expense to the database',
-            parameters: {
-                type: 'object',
-                properties: {
-                        category: {
-                            type: 'string',
-                        },
-                        amount: {
-                            type:'number',
-                        }
-                },
-                required: ['category', 'amount'],
-            }
-        }
-    },
-    {
-        intent: 'remove_expense',
-        type: 'function',
-        function: {
-            name: 'remove_expense',
-            description: 'Remove an expense from the database',
-            parameters: {
-                type: 'object',
-                properties: {
-                        category: {
-                            type:'string',
-                        },
-                        amount: {
-                            type:'number',
-                        }
-                },
-                required: ['category', 'amount'],
-            }
-        }
-    },
-    {
-        type: 'function',
-        function: {
-            name:'set_goal',
-            description: 'Set a goal for the user',
-            parameters: {
-                type: 'object',
-                properties: {
-                        goal_name: {
-                            type:'string',
-                        },
-                        amount: {
-                            type:'number',
-                        }
-                },
-                required: ['goal_name', 'amount'],
-            }
-        }
-    },
-    {
-        type: 'function',
-        function: {
-            name:'view_goals',
-            description: 'View the goals for the user',
-        }
-    },
-    {
-        type: 'function',
-        function: {
-            name:'unknown_intent',
-            description: 'Unknown intent, when you don\'t understand the user\'s intent',
-            parameters: {
-                type: 'object',
-                properties: {
-                        message: {
-                            type:'string',
-                        }
-                },
-                required: ['message'],
-            }
-        }
-    }
+		type: 'function',
+		function: {
+			name: 'add_expense',
+			description: 'Add an expense to the database',
+			parameters: {
+				type: 'object',
+				properties: {
+					category: {
+						type: 'string',
+					},
+					amount: {
+						type: 'number',
+					}
+				},
+				required: ['category', 'amount'],
+			}
+		}
+	},
+	{
+		intent: 'remove_expense',
+		type: 'function',
+		function: {
+			name: 'remove_expense',
+			description: 'Remove an expense from the database',
+			parameters: {
+				type: 'object',
+				properties: {
+					category: {
+						type: 'string',
+					},
+					amount: {
+						type: 'number',
+					}
+				},
+				required: ['category', 'amount'],
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'set_goal',
+			description: 'Set a goal for the user',
+			parameters: {
+				type: 'object',
+				properties: {
+					goal_name: {
+						type: 'string',
+					},
+					amount: {
+						type: 'number',
+					}
+				},
+				required: ['goal_name', 'amount'],
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'view_goals',
+			description: 'View the goals for the user',
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'unknown_intent',
+			description: 'Unknown intent, when you don\'t understand the user\'s intent',
+			parameters: {
+				type: 'object',
+				properties: {
+					message: {
+						type: 'string',
+					}
+				},
+				required: ['message'],
+			}
+		}
+	}
 ]
 
 const callLlMAPi = async (prompt: string) => {
 	const LLM_ENDPOINT = process.env.OPEN_ROUTE_URL;
 	const LLM_API_KEY = process.env.OPEN_ROUTE_KEY;
-
-	// const messages = [
-	// 	{
-	// 		role: "system",
-	// 		content:
-	// 			"You are an intelligent assistant for a personal finance tracker accessed via WhatsApp in Brazil.",
-	// 	},
-	// 	{
-	// 		role: "user",
-	// 		content: prompt,
-	// 	},
-	// ]
-	
 
 	if (!LLM_ENDPOINT || !LLM_API_KEY) {
 		throw new Error("LLM API endpoint or key not configured.");
@@ -182,7 +169,7 @@ const callLlMAPi = async (prompt: string) => {
 				Authorization: `Bearer ${LLM_API_KEY}`,
 			},
 			body: JSON.stringify({
-				model: "google/gemini-2.0-flash-exp:free",
+				model: "openai/gpt-oss-20b:free",
 				prompt
 			}),
 		});
@@ -236,7 +223,7 @@ const processLlmRequest = async (
 						: amountRaw;
 
 				if (category && amount && !isNaN(amount)) {
-					await addExpense({userId, category, amount});
+					await addExpense({ userId, category, amount });
 					await sendWhatsAppMessage(
 						senderPhone,
 						`✅ Expense added: ${category} R$${amount.toFixed(2)}`
@@ -286,8 +273,8 @@ const processLlmRequest = async (
 				const goalMessage =
 					goals.length > 0
 						? `Seus objetivoss:\n${goals
-								.map((g) => `- ${g.name}: R$${g.amount.toFixed(2)}`)
-								.join("\n")}`
+							.map((g) => `- ${g.name}: R$${g.amount.toFixed(2)}`)
+							.join("\n")}`
 						: "Você ainda não tem objetivos.";
 				await sendWhatsAppMessage(senderPhone, goalMessage);
 				break;
