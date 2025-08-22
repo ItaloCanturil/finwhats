@@ -3,12 +3,6 @@ import * as p from "drizzle-orm/pg-core";
 
 export const dbSchema = p.pgSchema("zaza");
 
-export const subscriptionStatusEnum = dbSchema.enum("status", [
-	"active",
-	"inactive",
-	"canceled",
-]);
-
 export const users = dbSchema.table("users", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
 	user_id: p.text("user_id").unique().notNull(),
@@ -62,9 +56,15 @@ export const goalRelations = relations(goalsTable, ({ one, many }) => ({
 	expenses: many(expenseTable),
 }));
 
-export const subscriptionPeriodEnum = dbSchema.enum("billing", [
+export const subscriptionPeriodEnum = dbSchema.enum("subscription_billing_period", [
 	"monthly",
 	"annual",
+]);
+
+export const subscriptionStatusEnum = dbSchema.enum("subscription_status_type", [
+	"active",
+	"inactive",
+	"canceled",
 ]);
 
 export const subscriptions = dbSchema.table("subscriptions", {
