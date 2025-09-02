@@ -4,10 +4,11 @@ import { auth } from './auth';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
-  // Skip auth check for public routes and API auth routes
+
   if (
+    pathname.startsWith('/message') ||
     pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/v1/webhooks') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/auth') ||
     pathname === '/' ||
@@ -16,21 +17,18 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
-  
-  // Check if user is authenticated for protected routes
+
   try {
     const session = await auth.api.getSession({
       headers: request.headers,
     });
-    
+
     if (!session) {
-      // Redirect to sign-in page if not authenticated
       return NextResponse.redirect(new URL('/auth/sign-in', request.url));
     }
-    
+
     return NextResponse.next();
   } catch (error) {
-    // If there's an error checking the session, redirect to sign-in
     return NextResponse.redirect(new URL('/auth/sign-in', request.url));
   }
 }

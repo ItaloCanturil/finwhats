@@ -8,8 +8,9 @@ const sendWhatsAppMessage = async (senderPhone: string, message: string) => {
 	}
 
 	try {
+		const protocol = url.includes('localhost') || url.includes('127.0.0.1') ? 'http' : 'https';
 		const response = await fetch(
-			`https://${url}/message/sendText/${instance}`,
+			`${protocol}://${url}/message/sendText/${instance}`,
 			{
 				method: "POST",
 				headers: {
@@ -22,10 +23,15 @@ const sendWhatsAppMessage = async (senderPhone: string, message: string) => {
 				}),
 			}
 		);
+		console.log("🚀 ~ sendWhatsAppMessage ~ response:", response)
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
 
 		return response;
 	} catch (error) {
-		console.error(error);
+		console.error('WhatsApp send error:', error);
 		throw new Error("Erro no envio da mensagem.", { cause: error });
 	}
 };
