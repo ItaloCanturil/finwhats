@@ -15,7 +15,6 @@ describe('OpenRouterLLMService', () => {
     process.env = {
       ...originalEnv,
       OPEN_ROUTE_URL: 'https://openrouter.ai/api/v1/chat/completions',
-      OPEN_ROUTE_KEY: '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',
       LLM_MODEL: 'deepseek/deepseek-chat-v3.1:free'
     };
     service = new OpenRouterLLMService();
