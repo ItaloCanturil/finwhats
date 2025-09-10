@@ -25,7 +25,7 @@ export class EvolutionWhatsAppService implements WhatsAppService {
     try {
       const protocol = this.determineProtocol();
       const response = await this.makeRequest(protocol, phoneNumber, message);
-      
+
       return {
         success: true,
         messageId: response.messageId // if available from API
@@ -46,8 +46,8 @@ export class EvolutionWhatsAppService implements WhatsAppService {
   }
 
   private determineProtocol(): string {
-    return this.baseUrl.includes('localhost') || this.baseUrl.includes('127.0.0.1') 
-      ? 'http' 
+    return this.baseUrl.includes('localhost') || this.baseUrl.includes('127.0.0.1')
+      ? 'http'
       : 'https';
   }
 
@@ -58,11 +58,11 @@ export class EvolutionWhatsAppService implements WhatsAppService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          apiKey: this.apiKey,
+          apikey: this.apiKey,
         },
         body: JSON.stringify({
           number: phoneNumber,
-          text: message,
+          text: message
         }),
       }
     );

@@ -1,4 +1,4 @@
-import sendWhatsAppMessage from "@/_lib/whatsappSender";
+import { EvolutionWhatsAppService } from "@/services/WhatsAppService";
 import db from "@/db/drizzle";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -23,12 +23,12 @@ export async function POST(request: Request) {
             return Response.json({ status: 'event_ignored' });
         }
 
+        console.log('✅ WhatsApp Webhook Received!', body);
+
         const senderNumber = body?.sender;
-        // Remove o sufixo '@s.whatsapp.net' do número do remetente
-        // Format number with country code (e.g. 5511999999999)
-        // need add 9 after fourth number
-        // Format: 55748142912 -> 5574981429126
-        const receiveNumber = body.data.remoteJid.replace('@s.whatsapp.net', '').replace(/[^0-9]/g, '');
+
+        const eventData = Array.isArray(body.data) ? body.data[0] : body.data;
+        const receiveNumber = eventData.remoteJid.replace('@s.whatsapp.net', '').replace(/[^0-9]/g, '');
         const formattedNumber = `${receiveNumber.slice(0, 4)}9${receiveNumber.slice(4)}`;
         console.log("🚀 ~ POST ~ formattedNumber:", formattedNumber)
 
@@ -37,12 +37,12 @@ export async function POST(request: Request) {
         );
 
         if (!potentialUser[0]) {
-            await sendWhatsAppMessage(formattedNumber, `Usuário não encontrado, crie o login pelo site`);
+            const whatsappService = new EvolutionWhatsAppService();
+            const result = await whatsappService.sendMessage(formattedNumber, `Usuário não encontrado, crie o login pelo site`);
+            console.log("🚀 ~ POST ~ result:", result)
+
             return new Response("User not found", { status: 404 });
         }
-
-        console.log('✅ WhatsApp Webhook Received!');
-        console.log(body);
     } catch (error) {
         console.error('❌ Error processing WhatsApp Webhook:', error);
         return new Response("Internal Server Error", { status: 500 });
