@@ -21,7 +21,7 @@ export class OpenRouterLLMService implements LLMService {
   constructor() {
     this.endpoint = process.env.OPEN_ROUTE_URL || 'https://openrouter.ai/api/v1/chat/completions';
     this.apiKey = process.env.OPEN_ROUTE_KEY || '';
-    this.model = process.env.LLM_MODEL || 'openai/gpt-oss-20b:free';
+    this.model = process.env.LLM_MODEL || 'deepseek/deepseek-chat-v3.1:free';
 
     if (!this.apiKey) {
       throw new Error('LLM API key not configured');
@@ -103,7 +103,7 @@ export class OpenRouterLLMService implements LLMService {
 
       return await response.json();
     } catch (error) {
-      throw new Error('Failed to call LLM API', { cause: error });
+      throw new Error(`LLM API failed with status: ${error}`, { cause: error });
     }
   }
 
