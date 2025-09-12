@@ -1,0 +1,43 @@
+"use client";
+import React from "react";
+import { Button } from "./Button";
+import Image from "next/image";
+
+interface GoogleSignButtonProps {
+	onClick?: () => void;
+	disabled?: boolean;
+	className?: string;
+	text?: string;
+}
+
+const GoogleSignButton = ({
+	onClick,
+	disabled = false,
+	className,
+	text = "Entrar com Google",
+}: GoogleSignButtonProps) => {
+	return (
+		<Button
+			variant="outline"
+			size="medium"
+			onClick={onClick}
+			disabled={disabled}
+			className={`flex items-center justify-center gap-3 w-full border-gray-300 hover:bg-gray-50 ${className}`}
+			fill_background_color="bg-white"
+			text_color="text-gray-700"
+			border_border_radius="rounded-md"
+			effect_box_shadow="shadow-sm"
+		>
+			<Image
+				src="/google-icon-logo-svgrepo-com.svg"
+				alt="Google"
+				width={20}
+				height={20}
+				className="w-5 h-5"
+			/>
+			<span className="font-medium">{text}</span>
+		</Button>
+	);
+};
+
+export default GoogleSignButton;
