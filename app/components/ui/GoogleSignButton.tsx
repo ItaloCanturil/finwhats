@@ -19,14 +19,10 @@ const GoogleSignButton = ({
 	return (
 		<Button
 			variant="outline"
-			size="medium"
+			size="default"
 			onClick={onClick}
 			disabled={disabled}
-			className={`flex items-center justify-center gap-3 w-full border-gray-300 hover:bg-gray-50 ${className}`}
-			fill_background_color="bg-white"
-			text_color="text-gray-700"
-			border_border_radius="rounded-md"
-			effect_box_shadow="shadow-sm"
+			className={`flex items-center justify-center gap-3 w-full border-gray-300 hover:bg-gray-50 bg-white rounded-md shadow-md bg-white text-gray-700 ${className}`}
 		>
 			<Image
 				src="/google-icon-logo-svgrepo-com.svg"
