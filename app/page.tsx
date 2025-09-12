@@ -1,29 +1,26 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { ConnectWhatsappModal } from "@/components/ConnectWhatsappModal";
+'use client';
+import Header from'@/components/common/Header';
+ import Footer from'@/components/common/Footer';
+import HeroSection from '@/landing-page/HeroSection';
+import FeaturesSection from '@/landing-page/FeaturesSection';
+import PricingSection from '@/landing-page/PricingSection';
+import TestimonialSection from '@/landing-page/TestimonialSection';
+import CTASection from '@/landing-page/CTASection';
 
-export default async function Home() {
-	// const { userId } = await auth();
-	// if (!userId) {
-	// 	redirect("/login");
-	// }
-
-	return (
-		<main className="min-h-screen flex flex-col items-center justify-center gap-6 p-4">
-			<h1 className="text-3xl font-bold text-center">WhatsApp Finance</h1>
-			<p className="text-gray-600 text-center max-w-md">
-				Manage your finances easily through WhatsApp messages
-			</p>
-			<div className="flex flex-col gap-4 w-full max-w-xs">
-				<ConnectWhatsappModal />
-				<Link
-					href="/dashboard"
-					className="bg-blue-500 text-white py-3 px-6 rounded-lg text-center hover:bg-blue-600 transition-colors"
-				>
-					Go to Dashboard
-				</Link>
-			</div>
-		</main>
-	);
+const HomePage = () => {
+  return (
+    <>
+      <Header />
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <PricingSection />
+        <TestimonialSection />
+        <CTASection />
+      </main>
+      <Footer />
+    </>
+  )
 }
+
+export default HomePage
