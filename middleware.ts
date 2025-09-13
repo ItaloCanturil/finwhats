@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { auth } from './auth';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -18,24 +17,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  try {
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-
-    if (!session) {
-      return NextResponse.redirect(new URL('/auth/sign-in', request.url));
-    }
-
-    return NextResponse.next();
-  } catch (error) {
+  // Check for session cookie instead of using Better Auth API
+  const sessionCookie = request.cookies.get('better-auth.session_token');
+  
+  if (!sessionCookie) {
     return NextResponse.redirect(new URL('/auth/sign-in', request.url));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|[^?]*\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     "/(api|trpc)(.*)",
   ],
 };

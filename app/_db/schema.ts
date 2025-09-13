@@ -7,7 +7,7 @@ export const dbSchema = p.pgSchema("main");
 export const user = dbSchema.table("user", {
 	id: p.text("id").primaryKey(),
 	name: p.text("name").notNull(),
-	phone: p.text("phone").notNull().unique(),
+	phone: p.text("phone").unique(),
 	email: p.text("email").notNull().unique(),
 	emailVerified: p.boolean("email_verified").default(false).notNull(),
 	image: p.text("image"),
