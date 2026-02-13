@@ -1,5 +1,7 @@
-import db from "@/app/_db/drizzle";
-import { expenseTable } from "@/app/_db/schema";
+import db from "@/db/drizzle";
+import { expenseTable } from "@/db/schema";
+import { auth } from "../../../../auth";
+import { headers } from "next/headers";
 
 interface AddExpenseParams {
 	category: string;
@@ -7,12 +9,15 @@ interface AddExpenseParams {
 }
 
 export const addExpense = async (params: AddExpenseParams) => {
-	const { userId } = await getServerSession();
-	if (!userId) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	if (!session?.user?.id) {
 		throw new Error("Unauthorized");
 	}
 
 	await db
 		.insert(expenseTable)
-		.values({ ...params, amount: params.amount.toString(), user_id: userId });
+		.values({ ...params, amount: params.amount.toString(), user_id: session.user.id });
 };

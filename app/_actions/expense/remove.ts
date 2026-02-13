@@ -1,6 +1,8 @@
-import db from "@/app/_db/drizzle";
-import { expenseTable } from "@/app/_db/schema";
+import db from "@/db/drizzle";
+import { expenseTable } from "@/db/schema";
+import { auth } from "../../../../auth";
 import { eq, and } from "drizzle-orm";
+import { headers } from "next/headers";
 
 interface RemoveExpenseParams {
 	category: string;
@@ -8,7 +10,11 @@ interface RemoveExpenseParams {
 }
 
 export const removeExpense = async (params: RemoveExpenseParams) => {
-	if (!userId) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	if (!session?.user?.id) {
 		throw new Error("Unauthorized");
 	}
 
@@ -16,7 +22,7 @@ export const removeExpense = async (params: RemoveExpenseParams) => {
 		.delete(expenseTable)
 		.where(
 			and(
-				eq(expenseTable.user_id, userId),
+				eq(expenseTable.user_id, session.user.id),
 				eq(expenseTable.category, params.category),
 				eq(expenseTable.amount, params.amount.toString())
 			)
