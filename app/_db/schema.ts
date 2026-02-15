@@ -69,7 +69,7 @@ export const verification = dbSchema.table("verification", {
 // Your existing business tables (updated to reference the new user table)
 export const expenseTable = dbSchema.table("expenses", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
-	user_id: p.text("user_id").references(() => user.id), // Changed from UUID to text
+	user_id: p.text("user_id").references(() => user.id),
 	category: p.text("category").notNull(),
 	amount: p.decimal({ precision: 10, scale: 2 }).notNull(),
 	updated_at: p.timestamp({ withTimezone: true }),
@@ -81,9 +81,26 @@ export const expenseCategories = dbSchema.table("expense_categories", {
 	name: p.text("name").notNull(),
 });
 
+// Transactions table (unified income & expense)
+export const transactionTypeEnum = dbSchema.enum("transaction_type", [
+	"income",
+	"expense",
+]);
+
+export const transactionTable = dbSchema.table("transactions", {
+	id: p.uuid().defaultRandom().primaryKey().notNull(),
+	user_id: p.text("user_id").references(() => user.id).notNull(),
+	type: transactionTypeEnum("type").notNull(),
+	category: p.text("category").notNull(),
+	description: p.text("description"),
+	amount: p.decimal({ precision: 10, scale: 2 }).notNull(),
+	updated_at: p.timestamp({ withTimezone: true }),
+	created_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
+});
+
 export const goalsTable = dbSchema.table("goals", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
-	user_id: p.text("user_id").references(() => user.id), // Changed from UUID to text
+	user_id: p.text("user_id").references(() => user.id),
 	name: p.text("name").notNull(),
 	target_amount: p.decimal({ precision: 10, scale: 2 }).notNull(),
 	created_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
@@ -102,7 +119,7 @@ export const subscriptionStatusEnum = dbSchema.enum("subscription_status_type", 
 
 export const subscriptions = dbSchema.table("subscriptions", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
-	user_id: p.text("user_id").references(() => user.id), // Changed from UUID to text
+	user_id: p.text("user_id").references(() => user.id),
 	stripe_subscription_id: p.text().unique(),
 	status: subscriptionStatusEnum("status").notNull(),
 	period: subscriptionPeriodEnum("billing").notNull(),
@@ -126,6 +143,13 @@ export const expenseRelations = relations(expenseTable, ({ one }) => ({
 	}),
 }));
 
+export const transactionRelations = relations(transactionTable, ({ one }) => ({
+	user: one(user, {
+		fields: [transactionTable.user_id],
+		references: [user.id],
+	}),
+}));
+
 export const goalRelations = relations(goalsTable, ({ one, many }) => ({
 	user: one(user, {
 		fields: [goalsTable.user_id],
@@ -137,5 +161,6 @@ export const goalRelations = relations(goalsTable, ({ one, many }) => ({
 export const userRelations = relations(user, ({ many }) => ({
 	subscriptions: many(subscriptions),
 	expenses: many(expenseTable),
+	transactions: many(transactionTable),
 	goals: many(goalsTable),
 }));

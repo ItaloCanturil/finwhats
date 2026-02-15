@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button } from "./button";
+import { Button } from "./Button";
 import Image from "next/image";
 
 interface GoogleSignButtonProps {
@@ -22,7 +22,7 @@ const GoogleSignButton = ({
 			size="default"
 			onClick={onClick}
 			disabled={disabled}
-			className={`flex items-center justify-center gap-3 w-full border-gray-300 hover:bg-gray-50 bg-white rounded-md shadow-md bg-white text-gray-700 ${className}`}
+			className={`flex items-center justify-center gap-3 w-full border-gray-300 hover:bg-gray-50 bg-white rounded-md shadow-md text-gray-700 ${className}`}
 		>
 			<Image
 				src="/google-icon-logo-svgrepo-com.svg"

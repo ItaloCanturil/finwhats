@@ -1,4 +1,4 @@
-import stripe from "@/app/_lib/stripe";
+import stripe from "@/_lib/stripe";
 import { NextResponse } from "next/server"
 
 export const POST = async (request: Request) => {

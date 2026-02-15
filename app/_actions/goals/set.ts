@@ -1,5 +1,5 @@
-import db from "@/app/_db/drizzle";
-import { goalsTable } from "@/app/_db/schema";
+import db from "@/_db/drizzle";
+import { goalsTable } from "@/_db/schema";
 
 interface SetGoalParams {
 	name: string;

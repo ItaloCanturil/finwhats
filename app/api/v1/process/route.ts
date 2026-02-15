@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { ProcessWhatsAppMessageUseCase } from '@/app/use-cases/messaging/ProcessWhatsAppMessageUseCase';
-import { getUserFromSession } from '@/app/_lib/auth';
+import { ProcessWhatsAppMessageUseCase } from '@/use-cases/messaging/ProcessWhatsAppMessageUseCase';
+import { getUserFromSession } from '@/_lib/auth';
 
 export async function POST(request: Request) {
   try {

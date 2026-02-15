@@ -1,23 +1,23 @@
 
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/app/components/ui/chart";
-import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon, TrendingUpIcon } from "lucide-react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react";
+import { Bar, BarChart } from "recharts";
 
 const chartConfig = {
     income: {
         label: "Income",
-        color: "#10b981", // emerald-500
+        color: "#10b981",
     },
     expense: {
         label: "Expense",
-        color: "#f43f5e", // rose-500
+        color: "#f43f5e",
     },
 } satisfies ChartConfig;
 
-// Mock data for the chart
+// Placeholder chart data — will be replaced with real aggregation later
 const chartData = [
     { month: "Jan", income: 4000, expense: 2400 },
     { month: "Feb", income: 3000, expense: 1398 },
@@ -28,17 +28,13 @@ const chartData = [
     { month: "Jul", income: 3490, expense: 4300 },
 ];
 
-export function OverviewCards() {
-    // Mock data - replace with real data fetching later
-    const data = {
-        income: 5240.50,
-        expense: 2350.20,
-        balance: 2890.30,
-        incomeChange: 12.5,
-        expenseChange: -5.2,
-        balanceChange: 8.4,
-    };
+interface OverviewCardsProps {
+    income: number;
+    expense: number;
+    balance: number;
+}
 
+export function OverviewCards({ income, expense, balance }: OverviewCardsProps) {
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
@@ -59,11 +55,7 @@ export function OverviewCards() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{formatCurrency(data.income)}</div>
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center">
-                        <TrendingUpIcon className="w-3 h-3 mr-1 text-emerald-500" />
-                        <span className="text-emerald-500 font-medium">+{data.incomeChange}%</span> from last month
-                    </p>
+                    <div className="text-2xl font-bold">{formatCurrency(income)}</div>
                     <div className="h-[80px] mt-4">
                         <ChartContainer config={chartConfig} className="h-full w-full">
                             <BarChart data={chartData}>
@@ -86,11 +78,7 @@ export function OverviewCards() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{formatCurrency(data.expense)}</div>
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center">
-                        <TrendingUpIcon className="w-3 h-3 mr-1 text-emerald-500" />
-                        <span className="text-emerald-500 font-medium">{Math.abs(data.expenseChange)}%</span> from last month
-                    </p>
+                    <div className="text-2xl font-bold">{formatCurrency(expense)}</div>
                     <div className="h-[80px] mt-4">
                         <ChartContainer config={chartConfig} className="h-full w-full">
                             <BarChart data={chartData}>
@@ -113,11 +101,7 @@ export function OverviewCards() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{formatCurrency(data.balance)}</div>
-                    <p className="text-xs text-slate-400 mt-1 flex items-center">
-                        <TrendingUpIcon className="w-3 h-3 mr-1 text-emerald-400" />
-                        <span className="text-emerald-400 font-medium">+{data.balanceChange}%</span> from last month
-                    </p>
+                    <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
                     <div className="h-[80px] mt-4">
                         <ChartContainer config={chartConfig} className="h-full w-full">
                             <BarChart data={chartData}>

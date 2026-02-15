@@ -6,23 +6,36 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signUp } from "@/_lib/auth-client";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+	MessageSquare,
+	Mail,
+	Lock,
+	User,
+	Phone,
+	ArrowRight,
+	Loader2,
+	AlertCircle,
+} from "lucide-react";
 
 const signUpSchema = z
 	.object({
-		name: z.string().min(2, "Name must be at least 2 characters"),
-		email: z.string().email("Please enter a valid email address"),
+		name: z.string().min(2, "Nome precisa ter pelo menos 2 caracteres"),
+		email: z.string().email("Digite um email válido"),
 		phone: z
 			.string()
-			.min(10, "Phone number must be at least 10 digits")
+			.min(10, "Número precisa ter pelo menos 10 dígitos")
 			.regex(
 				/^[+]?[1-9][\d\s\-\(\)]{8,}$/,
-				"Please enter a valid phone number"
+				"Digite um número de telefone válido"
 			),
-		password: z.string().min(8, "Password must be at least 8 characters"),
+		password: z.string().min(8, "Senha precisa ter pelo menos 8 caracteres"),
 		confirmPassword: z.string(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords don't match",
+		message: "As senhas não conferem",
 		path: ["confirmPassword"],
 	});
 
@@ -44,7 +57,6 @@ export default function SignUpPage() {
 		setError(null);
 
 		try {
-			// Validate the form data
 			const validatedData = signUpSchema.parse(data);
 
 			const result = await signUp.email({
@@ -54,7 +66,7 @@ export default function SignUpPage() {
 			});
 
 			if (result.error) {
-				throw new Error(result.error.message || "Failed to create account");
+				throw new Error(result.error.message || "Falha ao criar conta");
 			}
 
 			router.push("/dashboard");
@@ -64,7 +76,7 @@ export default function SignUpPage() {
 			} else if (err instanceof Error) {
 				setError(err.message);
 			} else {
-				setError("An unexpected error occurred. Please try again.");
+				setError("Ocorreu um erro inesperado. Tente novamente.");
 			}
 		} finally {
 			setIsLoading(false);
@@ -72,185 +84,210 @@ export default function SignUpPage() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
-			<div className="card w-full max-w-md bg-base-100 shadow-xl">
-				<div className="card-body">
-					<h2 className="card-title text-2xl font-bold text-center mb-6">
-						Create Account
-					</h2>
+		<div className="min-h-screen flex">
+			{/* Left panel – branding */}
+			<div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[var(--whatsapp-green)] to-[var(--whatsapp-dark)] relative overflow-hidden">
+				<div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:48px_48px]" />
+				<div className="relative z-10 flex flex-col justify-center items-center w-full px-12 text-white">
+					<div className="flex items-center gap-3 mb-8">
+						<div className="flex size-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+							<MessageSquare className="size-6 text-white" />
+						</div>
+						<span className="text-3xl font-bold tracking-tight">FinWhats</span>
+					</div>
+					<p className="text-xl font-medium text-center text-white/90 max-w-md leading-relaxed">
+						Comece a controlar seus gastos em minutos. É simples como mandar uma mensagem.
+					</p>
+					<div className="mt-12 space-y-3 text-sm text-white/70">
+						<div className="flex items-center gap-3">
+							<div className="flex size-8 items-center justify-center rounded-full bg-white/10 text-white text-xs font-bold">1</div>
+							Crie sua conta
+						</div>
+						<div className="flex items-center gap-3">
+							<div className="flex size-8 items-center justify-center rounded-full bg-white/10 text-white text-xs font-bold">2</div>
+							Conecte seu WhatsApp
+						</div>
+						<div className="flex items-center gap-3">
+							<div className="flex size-8 items-center justify-center rounded-full bg-white/10 text-white text-xs font-bold">3</div>
+							Comece a enviar gastos
+						</div>
+					</div>
+				</div>
+			</div>
 
+			{/* Right panel – form */}
+			<div className="flex flex-1 items-center justify-center px-4 sm:px-6 lg:px-8 bg-background">
+				<div className="w-full max-w-sm space-y-6">
+					{/* Mobile logo */}
+					<div className="lg:hidden flex items-center justify-center gap-2 mb-2">
+						<div className="flex size-8 items-center justify-center rounded-lg bg-[var(--whatsapp-green)]">
+							<MessageSquare className="size-4 text-white" />
+						</div>
+						<span className="text-lg font-bold tracking-tight">
+							Fin<span className="text-[var(--finwhats-emerald)]">Whats</span>
+						</span>
+					</div>
+
+					<div className="space-y-2 text-center">
+						<h1 className="text-2xl font-bold tracking-tight">Criar conta</h1>
+						<p className="text-sm text-muted-foreground">
+							Preencha seus dados para começar
+						</p>
+					</div>
+
+					{/* Error alert */}
 					{error && (
-						<div className="alert alert-error mb-4">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								className="stroke-current shrink-0 h-6 w-6"
-								fill="none"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth="2"
-									d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
+						<div className="flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+							<AlertCircle className="size-4 shrink-0" />
 							<span>{error}</span>
 						</div>
 					)}
 
-					<form
-						onSubmit={handleSubmit(onSubmit)}
-						className="space-y-4 flex flex-col items-center"
-					>
-						<div className="form-control flex flex-col gap-2">
-							<label className="label">
-								<span className="label-text">Full Name</span>
-							</label>
-							<input
-								type="text"
-								placeholder="Enter your full name"
-								className={`input input-bordered ${
-									errors.name ? "input-error" : ""
-								}`}
-								{...register("name", {
-									required: "Name is required",
-									minLength: {
-										value: 2,
-										message: "Name must be at least 2 characters",
-									},
-								})}
-							/>
+					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+						{/* Name */}
+						<div className="space-y-2">
+							<Label htmlFor="name">Nome completo</Label>
+							<div className="relative">
+								<User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+								<Input
+									id="name"
+									type="text"
+									placeholder="Seu nome"
+									className={`pl-10 ${errors.name ? "border-destructive focus-visible:ring-destructive/50" : ""}`}
+									{...register("name", {
+										required: "Nome é obrigatório",
+										minLength: {
+											value: 2,
+											message: "Nome precisa ter pelo menos 2 caracteres",
+										},
+									})}
+								/>
+							</div>
 							{errors.name && (
-								<label className="label">
-									<span className="label-text-alt text-error">
-										{errors.name.message}
-									</span>
-								</label>
+								<p className="text-xs text-destructive">{errors.name.message}</p>
 							)}
 						</div>
 
-						<div className="form-control flex flex-col gap-2">
-							<label className="label">
-								<span className="label-text">Email</span>
-							</label>
-							<input
-								type="email"
-								placeholder="Enter your email"
-								className={`input input-bordered ${
-									errors.email ? "input-error" : ""
-								}`}
-								{...register("email", {
-									required: "Email is required",
-									pattern: {
-										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-										message: "Please enter a valid email address",
-									},
-								})}
-							/>
+						{/* Email */}
+						<div className="space-y-2">
+							<Label htmlFor="email">Email</Label>
+							<div className="relative">
+								<Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+								<Input
+									id="email"
+									type="email"
+									placeholder="seu@email.com"
+									className={`pl-10 ${errors.email ? "border-destructive focus-visible:ring-destructive/50" : ""}`}
+									{...register("email", {
+										required: "Email é obrigatório",
+										pattern: {
+											value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+											message: "Digite um email válido",
+										},
+									})}
+								/>
+							</div>
 							{errors.email && (
-								<label className="label">
-									<span className="label-text-alt text-error">
-										{errors.email.message}
-									</span>
-								</label>
+								<p className="text-xs text-destructive">{errors.email.message}</p>
 							)}
 						</div>
 
-						<div className="form-control flex flex-col gap-2">
-							<label className="label">
-								<span className="label-text">Phone Number</span>
-							</label>
-							<input
-								type="tel"
-								placeholder="+1 (555) 123-4567"
-								className={`input input-bordered ${
-									errors.phone ? "input-error" : ""
-								}`}
-								{...register("phone", {
-									required: "Phone number is required",
-									pattern: {
-										value: /^[+]?[1-9][\d\s\-\(\)]{8,}$/,
-										message: "Please enter a valid phone number",
-									},
-								})}
-							/>
+						{/* Phone */}
+						<div className="space-y-2">
+							<Label htmlFor="phone">WhatsApp</Label>
+							<div className="relative">
+								<Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+								<Input
+									id="phone"
+									type="tel"
+									placeholder="+55 (11) 99999-9999"
+									className={`pl-10 ${errors.phone ? "border-destructive focus-visible:ring-destructive/50" : ""}`}
+									{...register("phone", {
+										required: "Número do WhatsApp é obrigatório",
+										pattern: {
+											value: /^[+]?[1-9][\d\s\-\(\)]{8,}$/,
+											message: "Digite um número válido",
+										},
+									})}
+								/>
+							</div>
 							{errors.phone && (
-								<label className="label">
-									<span className="label-text-alt text-error">
-										{errors.phone.message}
-									</span>
-								</label>
+								<p className="text-xs text-destructive">{errors.phone.message}</p>
 							)}
 						</div>
 
-						<div className="form-control flex flex-col gap-2">
-							<label className="label">
-								<span className="label-text">Password</span>
-							</label>
-							<input
-								type="password"
-								placeholder="Enter your password"
-								className={`input input-bordered ${
-									errors.password ? "input-error" : ""
-								}`}
-								{...register("password", {
-									required: "Password is required",
-									minLength: {
-										value: 8,
-										message: "Password must be at least 8 characters",
-									},
-								})}
-							/>
+						{/* Password */}
+						<div className="space-y-2">
+							<Label htmlFor="password">Senha</Label>
+							<div className="relative">
+								<Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+								<Input
+									id="password"
+									type="password"
+									placeholder="Mínimo 8 caracteres"
+									className={`pl-10 ${errors.password ? "border-destructive focus-visible:ring-destructive/50" : ""}`}
+									{...register("password", {
+										required: "Senha é obrigatória",
+										minLength: {
+											value: 8,
+											message: "Senha precisa ter pelo menos 8 caracteres",
+										},
+									})}
+								/>
+							</div>
 							{errors.password && (
-								<label className="label">
-									<span className="label-text-alt text-error">
-										{errors.password.message}
-									</span>
-								</label>
+								<p className="text-xs text-destructive">{errors.password.message}</p>
 							)}
 						</div>
 
-						<div className="form-control flex flex-col gap-2">
-							<label className="label">
-								<span className="label-text">Confirm Password</span>
-							</label>
-							<input
-								type="password"
-								placeholder="Confirm your password"
-								className={`input input-bordered ${
-									errors.confirmPassword ? "input-error" : ""
-								}`}
-								{...register("confirmPassword", {
-									required: "Please confirm your password",
-								})}
-							/>
+						{/* Confirm Password */}
+						<div className="space-y-2">
+							<Label htmlFor="confirmPassword">Confirmar senha</Label>
+							<div className="relative">
+								<Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+								<Input
+									id="confirmPassword"
+									type="password"
+									placeholder="Repita a senha"
+									className={`pl-10 ${errors.confirmPassword ? "border-destructive focus-visible:ring-destructive/50" : ""}`}
+									{...register("confirmPassword", {
+										required: "Confirme sua senha",
+									})}
+								/>
+							</div>
 							{errors.confirmPassword && (
-								<label className="label">
-									<span className="label-text-alt text-error">
-										{errors.confirmPassword.message}
-									</span>
-								</label>
+								<p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
 							)}
 						</div>
 
-						<div className="form-control flex flex-col gap-2 mt-6">
-							<button
-								type="submit"
-								className={`btn btn-primary ${isLoading ? "loading" : ""}`}
-								disabled={isLoading}
-							>
-								{isLoading ? "Creating Account..." : "Sign Up"}
-							</button>
-						</div>
+						<Button
+							type="submit"
+							className="w-full bg-[var(--whatsapp-green)] hover:bg-[var(--whatsapp-dark)] text-white"
+							disabled={isLoading}
+						>
+							{isLoading ? (
+								<>
+									<Loader2 className="size-4 animate-spin" />
+									Criando conta...
+								</>
+							) : (
+								<>
+									Criar conta
+									<ArrowRight className="size-4" />
+								</>
+							)}
+						</Button>
 					</form>
 
-					<div className="divider">Already have an account?</div>
-
-					<div className="text-center">
-						<Link href="/auth/sign-in" className="link link-primary">
-							Sign in instead
+					<p className="text-center text-sm text-muted-foreground">
+						Já tem uma conta?{" "}
+						<Link
+							href="/auth/sign-in"
+							className="font-medium text-[var(--finwhats-emerald)] hover:underline"
+						>
+							Fazer login
 						</Link>
-					</div>
+					</p>
 				</div>
 			</div>
 		</div>
