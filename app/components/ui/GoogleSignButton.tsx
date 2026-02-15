@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button } from "./Button";
+import { Button } from "./button";
 import Image from "next/image";
 
 interface GoogleSignButtonProps {

@@ -1,11 +1,11 @@
-"use client";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import HeroSection from "@/landing-page/HeroSection";
+import HowItWorksSection from "@/landing-page/HowItWorksSection";
 import FeaturesSection from "@/landing-page/FeaturesSection";
+import DemoSection from "@/landing-page/DemoSection";
 import PricingSection from "@/landing-page/PricingSection";
-import TestimonialSection from "@/landing-page/TestimonialSection";
-import CTASection from "@/landing-page/CTASection";
+import FAQSection from "@/landing-page/FAQSection";
 
 const HomePage = () => {
 	return (
@@ -13,10 +13,11 @@ const HomePage = () => {
 			<Header />
 			<main>
 				<HeroSection />
+				<HowItWorksSection />
 				<FeaturesSection />
+				<DemoSection />
 				<PricingSection />
-				{/* <TestimonialSection /> */}
-				<CTASection />
+				<FAQSection />
 			</main>
 			<Footer />
 		</>

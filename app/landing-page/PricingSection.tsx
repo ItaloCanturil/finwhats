@@ -1,198 +1,81 @@
-"use client";
-import Button from "@/components/ui/IButton";
-import Image from "next/image";
+import { Button } from "@/components/ui/Button";
+import { Check, CreditCard, Zap } from "lucide-react";
+
+const planFeatures = [
+	"Acesso ilimitado via WhatsApp",
+	"Painel de controle completo",
+	"Relatórios mensais detalhados",
+	"Metas financeiras ilimitadas",
+	"IA para categorização automática",
+	"Suporte prioritário",
+] as const;
 
 const PricingSection = () => {
-	const handleComeceMensal = () => {
-		// Handle monthly plan signup
-		window.open(
-			"https://wa.me/your-whatsapp-number?text=Quero%20o%20plano%20mensal",
-			"_blank"
-		);
-	};
-
-	const handleComeceAnual = () => {
-		window.open(
-			"https://wa.me/your-whatsapp-number?text=Quero%20o%20plano%20anual",
-			"_blank"
-		);
-	};
-
 	return (
-		<section id="pricing" className="w-full bg-background-teal-lighter">
-			<div className="w-full bg-background-teal-lighter pt-[56px] sm:pt-[84px] lg:pt-[112px] pb-[56px] sm:pb-[84px] lg:pb-[112px]">
-				<div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pr-[28px] sm:pr-[42px] lg:pr-[56px] pl-[28px] sm:pl-[42px] lg:pl-[56px]">
-					<div className="flex flex-col gap-[39px] sm:gap-[59px] lg:gap-[78px] justify-start items-center w-full">
-						<div className="flex flex-col gap-3 lg:gap-[12px] justify-start items-center w-full max-w-[768px] mx-auto">
-							<div className="flex flex-col gap-2 lg:gap-[8px] justify-start items-center w-full pr-[28px] sm:pr-[42px] lg:pr-[56px] pl-[28px] sm:pl-[42px] lg:pl-[56px]">
-								<h2
-									className="text-[26px] sm:text-[39px] lg:text-3xl font-medium leading-[36px] sm:leading-[54px] lg:leading-6xl text-center text-primary-text"
-									style={{ fontFamily: "Manrope" }}
-								>
-									Planos de Preço
-								</h2>
-								<p
-									className="text-md font-normal leading-md text-center text-primary-text"
-									style={{ fontFamily: "Inter" }}
-								>
-									Escolha o plano que melhor se adapta a você
-								</p>
+		<section id="pricing" className="w-full py-20 sm:py-28 bg-background">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				{/* Section Header */}
+				<div className="text-center space-y-4 mb-16">
+					<p className="text-sm font-semibold uppercase tracking-widest text-[var(--finwhats-emerald)]">
+						Preços
+					</p>
+					<h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+						Um plano simples, sem surpresas
+					</h2>
+					<p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+						Teste grátis por 7 dias. Cancele a qualquer momento.
+					</p>
+				</div>
+
+				{/* Pricing Card */}
+				<div className="mx-auto max-w-md">
+					<div className="relative overflow-hidden rounded-3xl border-2 border-[var(--whatsapp-green)]/30 bg-card shadow-xl">
+						{/* Popular badge */}
+						<div className="absolute top-0 right-0">
+							<div className="flex items-center gap-1.5 bg-[var(--whatsapp-green)] text-white text-xs font-semibold px-4 py-1.5 rounded-bl-xl">
+								<Zap className="size-3" />
+								Mais popular
 							</div>
 						</div>
 
-						{/* Pricing Cards */}
-						<div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-[32px] w-full max-w-[1064px] mx-auto">
-							{/* Monthly Plan */}
-							<div className="flex flex-col gap-[63px] sm:gap-[95px] lg:gap-[126px] justify-start items-center w-full lg:w-[496px] h-auto bg-background-teal-light rounded-md pt-[16px] sm:pt-[24px] lg:pt-[32px] pr-[16px] sm:pr-[24px] lg:pr-[32px] pb-[16px] sm:pb-[24px] lg:pb-[32px] pl-[16px] sm:pl-[24px] lg:pl-[32px]">
-								<div className="flex flex-col gap-4 sm:gap-5 lg:gap-[18px] justify-start items-center w-full">
-									<div className="flex flex-col justify-start items-center w-full pr-[28px] sm:pr-[42px] lg:pr-[56px] pl-[28px] sm:pl-[42px] lg:pl-[56px]">
-										<h3
-											className="text-lg font-medium leading-2xl text-center text-primary-text"
-											style={{ fontFamily: "Manrope" }}
-										>
-											Plano Mensal
-										</h3>
-										<div
-											className="text-[36px] sm:text-[54px] lg:text-4xl font-medium leading-[50px] sm:leading-[74px] lg:leading-8xl text-center text-primary-text"
-											style={{ fontFamily: "Manrope" }}
-										>
-											R$10
-										</div>
-									</div>
-
-									<div className="flex flex-col gap-4 lg:gap-[16px] justify-center items-center w-full pt-[3px] sm:pt-[4px] lg:pt-[6px] pb-[3px] sm:pb-[4px] lg:pb-[6px]">
-										<div className="flex justify-start items-center w-full">
-											<Image
-												src="/images/img_check.svg"
-												alt="Check"
-												width={24}
-												height={24}
-												className="w-[24px] h-[24px]"
-											/>
-											<span
-												className="text-sm font-normal leading-sm text-left text-primary-text ml-[16px]"
-												style={{ fontFamily: "Inter" }}
-											>
-												Acesso ao assistente
-											</span>
-										</div>
-										<div className="flex justify-start items-center w-full">
-											<Image
-												src="/images/img_check.svg"
-												alt="Check"
-												width={24}
-												height={24}
-												className="w-[24px] h-[24px]"
-											/>
-											<span
-												className="text-sm font-normal leading-sm text-left text-primary-text ml-[16px]"
-												style={{ fontFamily: "Inter" }}
-											>
-												Consultas de saldo
-											</span>
-										</div>
-										<div className="flex justify-start items-center w-full">
-											<Image
-												src="/images/img_check.svg"
-												alt="Check"
-												width={24}
-												height={24}
-												className="w-[24px] h-[24px]"
-											/>
-											<span
-												className="text-sm font-normal leading-sm text-left text-primary-text ml-[16px]"
-												style={{ fontFamily: "Inter" }}
-											>
-												Lembretes de agenda
-											</span>
-										</div>
-									</div>
-								</div>
-
-								<Button
-									text="Comece agora"
-									variant="primary"
-									className="w-full pt-[10px] pr-[17px] sm:pr-[25px] lg:pr-[34px] pb-[10px] pl-[17px] sm:pl-[25px] lg:pl-[34px]"
-									onClick={handleComeceMensal}
-								/>
+						<div className="p-8 sm:p-10">
+							{/* Plan name */}
+							<div className="space-y-2">
+								<h3 className="text-2xl font-bold">Plano Premium</h3>
+								<p className="text-muted-foreground">Controle total das suas finanças pelo WhatsApp</p>
 							</div>
 
-							{/* Annual Plan */}
-							<div className="flex flex-col gap-[63px] sm:gap-[95px] lg:gap-[126px] justify-start items-center w-full lg:w-[496px] h-auto bg-background-teal-light rounded-md pt-[16px] sm:pt-[24px] lg:pt-[32px] pr-[16px] sm:pr-[24px] lg:pr-[32px] pb-[16px] sm:pb-[24px] lg:pb-[32px] pl-[16px] sm:pl-[24px] lg:pl-[32px]">
-								<div className="flex flex-col gap-4 sm:gap-5 lg:gap-[18px] justify-start items-center w-full">
-									<div className="flex flex-col justify-start items-center w-full pr-[28px] sm:pr-[42px] lg:pr-[56px] pl-[28px] sm:pl-[42px] lg:pl-[56px]">
-										<h3
-											className="text-lg font-medium leading-2xl text-center text-primary-text"
-											style={{ fontFamily: "Manrope" }}
-										>
-											Plano Anual
-										</h3>
-										<div
-											className="text-[36px] sm:text-[54px] lg:text-4xl font-medium leading-[50px] sm:leading-[74px] lg:leading-8xl text-center text-primary-text"
-											style={{ fontFamily: "Manrope" }}
-										>
-											R$100
-										</div>
-									</div>
+							{/* Price */}
+							<div className="mt-8 flex items-baseline gap-2">
+								<span className="text-5xl font-bold tracking-tight">R$ 19</span>
+								<span className="text-muted-foreground text-lg">/mês</span>
+							</div>
+							<p className="mt-1 text-sm text-muted-foreground">ou R$ 190/ano (economize 17%)</p>
 
-									<div className="flex flex-col gap-4 lg:gap-[16px] justify-start items-center w-full pt-[3px] sm:pt-[4px] lg:pt-[6px] pb-[3px] sm:pb-[4px] lg:pb-[6px]">
-										<div className="flex justify-start items-center w-full">
-											<Image
-												src="/images/img_check.svg"
-												alt="Check"
-												width={24}
-												height={24}
-												className="w-[24px] h-[24px]"
-											/>
-											<span
-												className="text-sm font-normal leading-sm text-left text-primary-text ml-[16px]"
-												style={{ fontFamily: "Inter" }}
-											>
-												Acesso ao assistente
-											</span>
+							{/* Features */}
+							<ul className="mt-8 space-y-4">
+								{planFeatures.map((feature) => (
+									<li key={feature} className="flex items-start gap-3">
+										<div className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--whatsapp-green)]/10 mt-0.5">
+											<Check className="size-3 text-[var(--whatsapp-green)]" />
 										</div>
-										<div className="flex justify-start items-center w-full">
-											<Image
-												src="/images/img_check.svg"
-												alt="Check"
-												width={24}
-												height={24}
-												className="w-[24px] h-[24px]"
-											/>
-											<span
-												className="text-sm font-normal leading-sm text-left text-primary-text ml-[16px]"
-												style={{ fontFamily: "Inter" }}
-											>
-												Consultas de saldo
-											</span>
-										</div>
-										<div className="flex justify-start items-center w-full">
-											<Image
-												src="/images/img_check.svg"
-												alt="Check"
-												width={24}
-												height={24}
-												className="w-[24px] h-[24px]"
-											/>
-											<span
-												className="text-sm font-normal leading-sm text-left text-primary-text ml-[16px]"
-												style={{ fontFamily: "Inter" }}
-											>
-												Relatórios personalizados
-											</span>
-										</div>
-									</div>
-								</div>
+										<span className="text-sm">{feature}</span>
+									</li>
+								))}
+							</ul>
 
-								<div className="flex justify-center items-center w-full bg-primary-background rounded-sm shadow-[0px_1px_2px_#0700000c] pt-[8px] pr-[8px] pb-[8px] pl-[8px]">
-									<button
-										onClick={handleComeceAnual}
-										className="text-sm font-medium leading-sm text-left text-button-primary-text self-end"
-										style={{ fontFamily: "Inter" }}
-									>
-										Comece agora
-									</button>
-								</div>
+							{/* CTA */}
+							<div className="mt-10 space-y-3">
+								<Button
+									className="w-full h-12 text-base font-semibold bg-[var(--whatsapp-green)] hover:bg-[var(--whatsapp-dark)] text-white shadow-lg shadow-[var(--whatsapp-green)]/25"
+									size="lg"
+								>
+									<CreditCard className="size-5" />
+									Assinar agora via Stripe
+								</Button>
+								<p className="text-center text-xs text-muted-foreground">
+									Pagamento seguro via Stripe. Cancele quando quiser.
+								</p>
 							</div>
 						</div>
 					</div>
