@@ -75,8 +75,6 @@ export default function SignInPage() {
 			await authClient.signIn.social({
 				provider: "google",
 				callbackURL: "/dashboard",
-				clientId: process.env.GOOGLE_CLIENT_ID,
-				clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 			});
 		} catch (err) {
 			if (err instanceof Error) {

@@ -1,7 +1,7 @@
-import { model } from "@/lib/gemini";
-import { addExpense } from "@/actions/expense/add";
-import { removeExpense } from "@/actions/expense/remove";
-import { getExpenses } from "@/actions/expense/get";
+import { model } from "@/_lib/gemini";
+import { addExpense } from "@/_actions/expense/add";
+import { removeExpense } from "@/_actions/expense/remove";
+import { getExpenses } from "@/_actions/expense/get";
 
 const tools = [
     {
@@ -20,14 +20,13 @@ const tools = [
             },
             {
                 name: "removeExpense",
-                description: "Remove an expense from the database. Requires category and amount.",
+                description: "Remove an expense from the database by its unique ID. Call getExpenses first to find the expense ID.",
                 parameters: {
                     type: "OBJECT",
                     properties: {
-                        category: { type: "STRING", description: "The category of the expense to remove" },
-                        amount: { type: "NUMBER", description: "The amount of the expense to remove" },
+                        id: { type: "STRING", description: "The unique ID (UUID) of the expense to remove" },
                     },
-                    required: ["category", "amount"],
+                    required: ["id"],
                 },
             },
             {

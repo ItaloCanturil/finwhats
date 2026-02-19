@@ -1,6 +1,8 @@
-import db from "@/db/drizzle";
-import { expenseTable } from "@/db/schema";
-import { auth } from "../../../../auth";
+"use server";
+
+import db from "@/_db/drizzle";
+import { expenseTable } from "@/_db/schema";
+import { auth } from "../../../auth";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 

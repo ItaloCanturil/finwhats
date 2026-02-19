@@ -1,3 +1,7 @@
+import { ExpenseRepository } from "@/repositories/ExpenseRepository";
+import { UserRepository } from "@/repositories/UserRepository";
+import { CategoryValidator } from "@/services/categoryValidator";
+
 export interface AddExpenseInput {
   userId: string;
   category: string;
@@ -16,7 +20,7 @@ export class AddExpenseUseCase {
     private expenseRepository: ExpenseRepository,
     private userRepository: UserRepository,
     private categoryValidator: CategoryValidator
-  ) {}
+  ) { }
 
   async execute(input: AddExpenseInput): Promise<AddExpenseOutput> {
     // Business validation

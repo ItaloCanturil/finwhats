@@ -1,15 +1,13 @@
-import db from "@/db/drizzle";
-import { expenseTable } from "@/db/schema";
-import { auth } from "../../../../auth";
+"use server";
+
+import db from "@/_db/drizzle";
+import { expenseTable } from "@/_db/schema";
+import { auth } from "../../../auth";
 import { eq, and } from "drizzle-orm";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
-interface RemoveExpenseParams {
-	category: string;
-	amount: number;
-}
-
-export const removeExpense = async (params: RemoveExpenseParams) => {
+export const removeExpense = async (id: string) => {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
@@ -22,9 +20,10 @@ export const removeExpense = async (params: RemoveExpenseParams) => {
 		.delete(expenseTable)
 		.where(
 			and(
-				eq(expenseTable.user_id, session.user.id),
-				eq(expenseTable.category, params.category),
-				eq(expenseTable.amount, params.amount.toString())
+				eq(expenseTable.id, id),
+				eq(expenseTable.user_id, session.user.id)
 			)
 		);
+
+	revalidatePath("/dashboard");
 };

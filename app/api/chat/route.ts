@@ -1,8 +1,17 @@
-import { runAgent } from "@/lib/agent";
+import { runAgent } from "@/_lib/agent";
 import { NextResponse } from "next/server";
+import { auth } from "../../../auth";
 
 export async function POST(req: Request) {
     try {
+        const session = await auth.api.getSession({
+            headers: req.headers,
+        });
+
+        if (!session?.user?.id) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const { message } = await req.json();
 
         if (!message) {
