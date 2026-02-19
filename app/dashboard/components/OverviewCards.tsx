@@ -3,6 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { EmptyChartState } from "@/components/ui/empty-state";
 import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react";
 import { Bar, BarChart } from "recharts";
 
@@ -17,30 +18,28 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-// Placeholder chart data — will be replaced with real aggregation later
-const chartData = [
-    { month: "Jan", income: 4000, expense: 2400 },
-    { month: "Feb", income: 3000, expense: 1398 },
-    { month: "Mar", income: 2000, expense: 9800 },
-    { month: "Apr", income: 2780, expense: 3908 },
-    { month: "May", income: 1890, expense: 4800 },
-    { month: "Jun", income: 2390, expense: 3800 },
-    { month: "Jul", income: 3490, expense: 4300 },
-];
+export interface MonthlyChartData {
+    month: string;
+    income: number;
+    expense: number;
+}
 
 interface OverviewCardsProps {
     income: number;
     expense: number;
     balance: number;
+    monthlyData: MonthlyChartData[];
 }
 
-export function OverviewCards({ income, expense, balance }: OverviewCardsProps) {
+export function OverviewCards({ income, expense, balance, monthlyData }: OverviewCardsProps) {
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
         }).format(value);
     };
+
+    const hasData = monthlyData.length > 0;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -57,12 +56,16 @@ export function OverviewCards({ income, expense, balance }: OverviewCardsProps) 
                 <CardContent>
                     <div className="text-2xl font-bold">{formatCurrency(income)}</div>
                     <div className="h-[80px] mt-4">
-                        <ChartContainer config={chartConfig} className="h-full w-full">
-                            <BarChart data={chartData}>
-                                <Bar dataKey="income" fill="var(--color-income)" radius={[4, 4, 0, 0]} />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                            </BarChart>
-                        </ChartContainer>
+                        {hasData ? (
+                            <ChartContainer config={chartConfig} className="h-full w-full">
+                                <BarChart data={monthlyData}>
+                                    <Bar dataKey="income" fill="var(--color-income)" radius={[4, 4, 0, 0]} />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                </BarChart>
+                            </ChartContainer>
+                        ) : (
+                            <EmptyChartState />
+                        )}
                     </div>
                 </CardContent>
             </Card>
@@ -80,12 +83,16 @@ export function OverviewCards({ income, expense, balance }: OverviewCardsProps) 
                 <CardContent>
                     <div className="text-2xl font-bold">{formatCurrency(expense)}</div>
                     <div className="h-[80px] mt-4">
-                        <ChartContainer config={chartConfig} className="h-full w-full">
-                            <BarChart data={chartData}>
-                                <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                            </BarChart>
-                        </ChartContainer>
+                        {hasData ? (
+                            <ChartContainer config={chartConfig} className="h-full w-full">
+                                <BarChart data={monthlyData}>
+                                    <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                </BarChart>
+                            </ChartContainer>
+                        ) : (
+                            <EmptyChartState />
+                        )}
                     </div>
                 </CardContent>
             </Card>
@@ -103,13 +110,17 @@ export function OverviewCards({ income, expense, balance }: OverviewCardsProps) 
                 <CardContent>
                     <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
                     <div className="h-[80px] mt-4">
-                        <ChartContainer config={chartConfig} className="h-full w-full">
-                            <BarChart data={chartData}>
-                                <Bar dataKey="income" stackId="a" fill="var(--color-income)" radius={[0, 0, 4, 4]} />
-                                <Bar dataKey="expense" stackId="a" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                            </BarChart>
-                        </ChartContainer>
+                        {hasData ? (
+                            <ChartContainer config={chartConfig} className="h-full w-full">
+                                <BarChart data={monthlyData}>
+                                    <Bar dataKey="income" stackId="a" fill="var(--color-income)" radius={[0, 0, 4, 4]} />
+                                    <Bar dataKey="expense" stackId="a" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                </BarChart>
+                            </ChartContainer>
+                        ) : (
+                            <EmptyChartState variant="dark" />
+                        )}
                     </div>
                 </CardContent>
             </Card>

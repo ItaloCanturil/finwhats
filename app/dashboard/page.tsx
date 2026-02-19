@@ -1,8 +1,52 @@
 import Sidebar from "./components/sidebar";
 import { OverviewCards } from "./components/OverviewCards";
+import type { MonthlyChartData } from "./components/OverviewCards";
 import { TransactionModal } from "./components/TransactionModal";
 import { TransactionListCard } from "./components/TransactionListCard";
 import { getTransactions } from "@/actions/transaction";
+
+function aggregateMonthlyData(
+	transactions: { type: "income" | "expense"; amount: string; created_at: Date }[]
+): MonthlyChartData[] {
+	const monthLabels = [
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+	] as const;
+
+	const monthMap = new Map<string, { income: number; expense: number; sortKey: number }>();
+
+	for (const t of transactions) {
+		const date = new Date(t.created_at);
+		const year = date.getFullYear();
+		const monthIndex = date.getMonth();
+		const key = `${year}-${monthIndex}`;
+
+		if (!monthMap.has(key)) {
+			monthMap.set(key, { income: 0, expense: 0, sortKey: year * 12 + monthIndex });
+		}
+
+		const entry = monthMap.get(key)!;
+		const amount = parseFloat(t.amount);
+
+		if (t.type === "income") {
+			entry.income += amount;
+		} else {
+			entry.expense += amount;
+		}
+	}
+
+	return Array.from(monthMap.entries())
+		.sort(([, a], [, b]) => a.sortKey - b.sortKey)
+		.slice(-12) // last 12 months max
+		.map(([key, data]) => {
+			const monthIndex = parseInt(key.split("-")[1], 10);
+			return {
+				month: monthLabels[monthIndex],
+				income: Math.round(data.income * 100) / 100,
+				expense: Math.round(data.expense * 100) / 100,
+			};
+		});
+}
 
 export default async function Dashboard() {
 	const transactions = await getTransactions();
@@ -17,6 +61,8 @@ export default async function Dashboard() {
 
 	const balance = income - expense;
 
+	const monthlyData = aggregateMonthlyData(transactions);
+
 	return (
 		<div className="flex h-screen bg-gray-50">
 			<Sidebar />
@@ -27,7 +73,12 @@ export default async function Dashboard() {
 					</h1>
 					<TransactionModal />
 				</div>
-				<OverviewCards income={income} expense={expense} balance={balance} />
+				<OverviewCards
+					income={income}
+					expense={expense}
+					balance={balance}
+					monthlyData={monthlyData}
+				/>
 				<TransactionListCard transactions={transactions} />
 			</main>
 		</div>
