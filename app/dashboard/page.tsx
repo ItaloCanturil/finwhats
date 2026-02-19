@@ -6,7 +6,7 @@ import { TransactionListCard } from "./components/TransactionListCard";
 import { getTransactions } from "@/actions/transaction";
 
 function aggregateMonthlyData(
-	transactions: { type: "income" | "expense"; amount: string; created_at: Date }[]
+	transactions: { type: "income" | "expense"; amount: string; reference_month: string }[]
 ): MonthlyChartData[] {
 	const monthLabels = [
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -16,7 +16,7 @@ function aggregateMonthlyData(
 	const monthMap = new Map<string, { income: number; expense: number; sortKey: number }>();
 
 	for (const t of transactions) {
-		const date = new Date(t.created_at);
+		const date = new Date(t.reference_month);
 		const year = date.getFullYear();
 		const monthIndex = date.getMonth();
 		const key = `${year}-${monthIndex}`;
@@ -37,7 +37,7 @@ function aggregateMonthlyData(
 
 	return Array.from(monthMap.entries())
 		.sort(([, a], [, b]) => a.sortKey - b.sortKey)
-		.slice(-12) // last 12 months max
+		.slice(-12)
 		.map(([key, data]) => {
 			const monthIndex = parseInt(key.split("-")[1], 10);
 			return {

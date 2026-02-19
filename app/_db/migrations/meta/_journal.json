@@ -15,6 +15,13 @@
       "when": 1757788652457,
       "tag": "0001_rapid_callisto",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771536173739,
+      "tag": "0002_simple_umar",
+      "breakpoints": true
     }
   ]
 }

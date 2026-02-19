@@ -87,6 +87,12 @@ export const transactionTypeEnum = dbSchema.enum("transaction_type", [
 	"expense",
 ]);
 
+export const recurrenceTypeEnum = dbSchema.enum("recurrence_type", [
+	"none",
+	"subscription",
+	"installment",
+]);
+
 export const transactionTable = dbSchema.table("transactions", {
 	id: p.uuid().defaultRandom().primaryKey().notNull(),
 	user_id: p.text("user_id").references(() => user.id).notNull(),
@@ -94,6 +100,10 @@ export const transactionTable = dbSchema.table("transactions", {
 	category: p.text("category").notNull(),
 	description: p.text("description"),
 	amount: p.decimal({ precision: 10, scale: 2 }).notNull(),
+	reference_month: p.date("reference_month").notNull(),
+	recurrence_type: recurrenceTypeEnum("recurrence_type").default("none").notNull(),
+	installment_current: p.integer("installment_current"),
+	installment_total: p.integer("installment_total"),
 	updated_at: p.timestamp({ withTimezone: true }),
 	created_at: p.timestamp({ withTimezone: true }).defaultNow().notNull(),
 });

@@ -45,6 +45,18 @@ const EXPENSE_CATEGORIES = [
 ] as const;
 
 type TransactionType = "income" | "expense";
+type RecurrenceType = "none" | "subscription" | "installment";
+
+function getCurrentMonthValue(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
+}
+
+function monthValueToReferenceMonth(monthValue: string): string {
+    return `${monthValue}-01`;
+}
 
 export function TransactionModal() {
     const [open, setOpen] = useState(false);
@@ -52,6 +64,10 @@ export function TransactionModal() {
     const [category, setCategory] = useState("");
     const [amount, setAmount] = useState("");
     const [description, setDescription] = useState("");
+    const [monthValue, setMonthValue] = useState(getCurrentMonthValue);
+    const [recurrenceType, setRecurrenceType] = useState<RecurrenceType>("none");
+    const [installmentCurrent, setInstallmentCurrent] = useState("");
+    const [installmentTotal, setInstallmentTotal] = useState("");
     const [isPending, startTransition] = useTransition();
 
     const categories = type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
@@ -60,12 +76,21 @@ export function TransactionModal() {
         setCategory("");
         setAmount("");
         setDescription("");
+        setMonthValue(getCurrentMonthValue());
+        setRecurrenceType("none");
+        setInstallmentCurrent("");
+        setInstallmentTotal("");
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!category || !amount) return;
+        if (
+            recurrenceType === "installment" &&
+            (!installmentCurrent || !installmentTotal)
+        )
+            return;
 
         startTransition(async () => {
             try {
@@ -74,6 +99,16 @@ export function TransactionModal() {
                     category,
                     amount: parseFloat(amount),
                     description: description || undefined,
+                    referenceMonth: monthValueToReferenceMonth(monthValue),
+                    recurrenceType,
+                    installmentCurrent:
+                        recurrenceType === "installment"
+                            ? parseInt(installmentCurrent, 10)
+                            : undefined,
+                    installmentTotal:
+                        recurrenceType === "installment"
+                            ? parseInt(installmentTotal, 10)
+                            : undefined,
                 });
                 resetForm();
                 setOpen(false);
@@ -82,6 +117,19 @@ export function TransactionModal() {
             }
         });
     };
+
+    const recurrenceButtons: { label: string; value: RecurrenceType }[] = [
+        { label: "None", value: "none" },
+        { label: "Subscription", value: "subscription" },
+        { label: "Installment", value: "installment" },
+    ];
+
+    const isSubmitDisabled =
+        isPending ||
+        !category ||
+        !amount ||
+        (recurrenceType === "installment" &&
+            (!installmentCurrent || !installmentTotal));
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -107,10 +155,11 @@ export function TransactionModal() {
                             onClick={() => {
                                 setType("income");
                                 setCategory("");
+                                setRecurrenceType("none");
                             }}
                             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${type === "income"
-                                    ? "bg-emerald-500 text-white shadow-sm"
-                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                ? "bg-emerald-500 text-white shadow-sm"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 }`}
                         >
                             Income
@@ -122,12 +171,36 @@ export function TransactionModal() {
                                 setCategory("");
                             }}
                             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${type === "expense"
-                                    ? "bg-rose-500 text-white shadow-sm"
-                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                ? "bg-rose-500 text-white shadow-sm"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 }`}
                         >
                             Expense
                         </button>
+                    </div>
+
+                    {/* Month Picker */}
+                    <div className="space-y-2">
+                        <Label htmlFor="month">Month</Label>
+                        <Input
+                            id="month"
+                            type="month"
+                            value={monthValue}
+                            onChange={(e) => setMonthValue(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-2">
+                        <Label htmlFor="description">Description</Label>
+                        <Input
+                            id="description"
+                            type="text"
+                            placeholder="e.g. Monthly salary"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
                     </div>
 
                     {/* Category */}
@@ -147,6 +220,66 @@ export function TransactionModal() {
                         </Select>
                     </div>
 
+                    {/* Recurrence Type */}
+                    {type === "expense" && (
+                        <div className="space-y-2">
+                            <Label>Recurrence</Label>
+                            <div className="flex gap-1">
+                                {recurrenceButtons.map((btn) => (
+                                    <button
+                                        key={btn.value}
+                                        type="button"
+                                        onClick={() => setRecurrenceType(btn.value)}
+                                        className={`flex-1 py-1.5 px-3 rounded-md text-xs font-medium transition-all ${recurrenceType === btn.value
+                                            ? "bg-slate-900 text-white shadow-sm"
+                                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                            }`}
+                                    >
+                                        {btn.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Installment Fields */}
+                    {recurrenceType === "installment" && (
+                        <div className="flex gap-3">
+                            <div className="flex-1 space-y-2">
+                                <Label htmlFor="installmentCurrent">
+                                    Current installment
+                                </Label>
+                                <Input
+                                    id="installmentCurrent"
+                                    type="number"
+                                    min="1"
+                                    placeholder="e.g. 3"
+                                    value={installmentCurrent}
+                                    onChange={(e) =>
+                                        setInstallmentCurrent(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="flex-1 space-y-2">
+                                <Label htmlFor="installmentTotal">
+                                    Total installments
+                                </Label>
+                                <Input
+                                    id="installmentTotal"
+                                    type="number"
+                                    min="1"
+                                    placeholder="e.g. 10"
+                                    value={installmentTotal}
+                                    onChange={(e) =>
+                                        setInstallmentTotal(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     {/* Amount */}
                     <div className="space-y-2">
                         <Label htmlFor="amount">Amount (R$)</Label>
@@ -162,18 +295,6 @@ export function TransactionModal() {
                         />
                     </div>
 
-                    {/* Description */}
-                    <div className="space-y-2">
-                        <Label htmlFor="description">Description (optional)</Label>
-                        <Input
-                            id="description"
-                            type="text"
-                            placeholder="e.g. Monthly salary"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </div>
-
                     <DialogFooter>
                         <Button
                             type="button"
@@ -184,7 +305,7 @@ export function TransactionModal() {
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending || !category || !amount}
+                            disabled={isSubmitDisabled}
                             className={
                                 type === "income"
                                     ? "bg-emerald-500 hover:bg-emerald-600"
