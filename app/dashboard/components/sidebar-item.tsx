@@ -1,4 +1,6 @@
-interface sidebarItemProps {
+import React from "react";
+
+interface SidebarItemProps {
 	icon: React.ReactNode;
 	text: string;
 	alert?: number;
@@ -6,20 +8,20 @@ interface sidebarItemProps {
 	onClick?: () => void;
 }
 
-const sidebarItem = ({
+const SidebarItem = ({
 	icon,
 	text,
 	alert,
 	active,
 	onClick,
-}: sidebarItemProps) => {
+}: SidebarItemProps) => {
 	return (
 		<div
-			className={`flex items-center my-1 px-4 py-[1rem] rounded-md cursor-pointer transition-colors duration-200 ${
-				active
+			onClick={onClick}
+			className={`flex items-center my-1 px-4 py-[1rem] rounded-md cursor-pointer transition-colors duration-200 ${active
 					? "bg-gradient-to-r from-slate-900 to-gray-700 text-white"
 					: "text-gray-500 hover:bg-gray-700 hover:text-white"
-			}`}
+				}`}
 		>
 			{icon}
 			<span className="ml-4 font-medium flex-1">{text}</span>
@@ -32,4 +34,4 @@ const sidebarItem = ({
 	);
 };
 
-export default sidebarItem;
+export default SidebarItem;

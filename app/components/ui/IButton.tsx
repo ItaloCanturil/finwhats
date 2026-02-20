@@ -36,7 +36,7 @@ const buttonClasses = cva(
 
 interface ButtonProps
 	extends ButtonHTMLAttributes<HTMLButtonElement>,
-		VariantProps<typeof buttonClasses> {
+	VariantProps<typeof buttonClasses> {
 	text?: string;
 	text_font_size?: string;
 	text_font_family?: string;
@@ -109,9 +109,9 @@ const Button = ({
 		// Only use inline styles for truly custom values
 		...(text_font_family &&
 			!text_font_family.startsWith("font-") && {
-				fontFamily: text_font_family,
-			}),
-		...(text_text_align && { textAlign: text_text_align as any }),
+			fontFamily: text_font_family,
+		}),
+		...(text_text_align && { textAlign: text_text_align as CSSProperties['textAlign'] }),
 	};
 
 	// Build Tailwind classes for styling

@@ -1,5 +1,5 @@
 'use client';
-import Image from'next/image';
+import Image from 'next/image';
 
 const TestimonialSection = () => {
   return (
@@ -25,11 +25,11 @@ const TestimonialSection = () => {
               height={18}
               className="w-[57px] sm:w-[86px] lg:w-[114px] h-[9px] sm:h-[14px] lg:h-[18px]"
             />
-            
+
             <blockquote className="text-[14px] sm:text-[21px] lg:text-xl font-medium leading-[20px] sm:leading-[29px] lg:leading-3xl text-center text-primary-text w-full max-w-[768px]" style={{ fontFamily: 'Manrope' }}>
-              "Zaza transformou a maneira como organizo meu dia a dia. Agora, consigo gerenciar meus compromissos com facilidade e eficiência."
+              &ldquo;Zaza transformou a maneira como organizo meu dia a dia. Agora, consigo gerenciar meus compromissos com facilidade e eficiência.&rdquo;
             </blockquote>
-            
+
             <div className="flex flex-col gap-4 lg:gap-[16px] justify-start items-center w-full max-w-[316px]">
               <Image
                 src="/images/img_avatar_image.png"

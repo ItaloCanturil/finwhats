@@ -1,15 +1,13 @@
-import { users } from "@/_db/schema";
+import { user } from "@/_db/schema";
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
-import db from "@/_db/drizzle";
+import defaultDb from "@/_db/drizzle";
 import { eq, or } from "drizzle-orm";
 
 // Infer types from Drizzle schema
-export type User = InferSelectModel<typeof users>;
-export type CreateUserData = Omit<InferInsertModel<typeof users>, 'id' | 'created_at' | 'updated_at'> & {
-  createdAt?: Date; // Optional, will default to now
-};
-export type UpdateUserData = Partial<Omit<CreateUserData, 'user_id'>>; // Can't update user_id
+export type User = InferSelectModel<typeof user>;
+export type CreateUserData = Omit<InferInsertModel<typeof user>, 'updatedAt'>;
+export type UpdateUserData = Partial<CreateUserData>;
 
 export interface UserRepository {
   create(user: CreateUserData): Promise<User>;
@@ -24,86 +22,86 @@ export interface UserRepository {
 }
 
 type Database = PostgresJsDatabase<{
-  users: typeof users;
+  user: typeof user;
 }>
 
 export class DrizzleUserRepository implements UserRepository {
-  constructor(private db: Database = db) {}
+  constructor(private db: Database = defaultDb as unknown as Database) { }
 
-  async create(user: CreateUserData): Promise<User> {
+  async create(userData: CreateUserData): Promise<User> {
     const [created] = await this.db
-      .insert(users)
+      .insert(user)
       .values({
-        user_id: user.user_id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        emailVerified: user.emailVerified || false,
-        image: user.image,
-        created_at: user.createdAt || new Date()
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+        phone: userData.phone,
+        emailVerified: userData.emailVerified,
+        image: userData.image,
+        createdAt: userData.createdAt || new Date()
       })
       .returning();
-    
+
     return created;
   }
 
   async findById(id: string): Promise<User | null> {
     const [result] = await this.db
       .select()
-      .from(users)
-      .where(eq(users.id, id))
+      .from(user)
+      .where(eq(user.id, id))
       .limit(1);
-    
+
     return result || null;
   }
 
   async findByUserId(userId: string): Promise<User | null> {
     const [result] = await this.db
       .select()
-      .from(users)
-      .where(eq(users.user_id, userId))
+      .from(user)
+      .where(eq(user.id, userId))
       .limit(1);
-    
+
     return result || null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
     const [result] = await this.db
       .select()
-      .from(users)
-      .where(eq(users.email, email))
+      .from(user)
+      .where(eq(user.email, email))
       .limit(1);
-    
+
     return result || null;
   }
 
   async findByPhone(phone: string): Promise<User | null> {
     const [result] = await this.db
       .select()
-      .from(users)
-      .where(eq(users.phone, phone))
+      .from(user)
+      .where(eq(user.phone, phone))
       .limit(1);
-    
+
     return result || null;
   }
 
   async findByEmailOrPhone(emailOrPhone: string): Promise<User | null> {
     const [result] = await this.db
       .select()
-      .from(users)
+      .from(user)
       .where(
         or(
-          eq(users.email, emailOrPhone),
-          eq(users.phone, emailOrPhone)
+          eq(user.email, emailOrPhone),
+          eq(user.phone, emailOrPhone)
         )
       )
       .limit(1);
-    
+
     return result || null;
   }
 
   async update(id: string, userData: UpdateUserData): Promise<User | null> {
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       ...userData,
       updated_at: new Date()
     };
@@ -116,27 +114,27 @@ export class DrizzleUserRepository implements UserRepository {
     });
 
     const [updated] = await this.db
-      .update(users)
+      .update(user)
       .set(updateData)
-      .where(eq(users.id, id))
+      .where(eq(user.id, id))
       .returning();
-    
+
     return updated || null;
   }
 
   async delete(id: string): Promise<void> {
     await this.db
-      .delete(users)
-      .where(eq(users.id, id));
+      .delete(user)
+      .where(eq(user.id, id));
   }
 
   async verifyEmail(userId: string): Promise<void> {
     await this.db
-      .update(users)
-      .set({ 
+      .update(user)
+      .set({
         emailVerified: true,
-        updated_at: new Date()
+        updatedAt: new Date()
       })
-      .where(eq(users.user_id, userId));
+      .where(eq(user.id, userId));
   }
 }

@@ -72,9 +72,7 @@ export default function SignUpPage() {
 			router.push("/dashboard");
 		} catch (err) {
 			if (err instanceof z.ZodError) {
-				setError(err.errors[0].message);
-			} else if (err instanceof Error) {
-				setError(err.message);
+				setError(err.issues[0].message);
 			} else {
 				setError("Ocorreu um erro inesperado. Tente novamente.");
 			}

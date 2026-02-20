@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import SidebarItem from "./sidebar-item";
 
-const sidebar = () => {
+const Sidebar = () => {
 	const [activeItem, setActiveItem] = useState<string | null>("Dashboard");
 
 	const handleItemClick = (itemName: string) => {
@@ -64,4 +64,4 @@ const sidebar = () => {
 	);
 };
 
-export default sidebar;
+export default Sidebar;

@@ -1,6 +1,6 @@
 import { ExpenseRepository } from "@/repositories/ExpenseRepository";
 import { UserRepository } from "@/repositories/UserRepository";
-import { CategoryValidator } from "@/services/categoryValidator";
+// import { CategoryValidator } from "@/services/categoryValidator";
 
 export interface AddExpenseInput {
   userId: string;
@@ -19,7 +19,7 @@ export class AddExpenseUseCase {
   constructor(
     private expenseRepository: ExpenseRepository,
     private userRepository: UserRepository,
-    private categoryValidator: CategoryValidator
+    // private categoryValidator: CategoryValidator
   ) { }
 
   async execute(input: AddExpenseInput): Promise<AddExpenseOutput> {
@@ -35,17 +35,16 @@ export class AddExpenseUseCase {
     }
 
     // Validate category
-    const isValidCategory = await this.categoryValidator.validate(input.category);
-    if (!isValidCategory) {
-      throw new Error('Invalid expense category');
-    }
+    // const isValidCategory = await this.categoryValidator.validate(input.category);
+    // if (!isValidCategory) {
+    //   throw new Error('Invalid expense category');
+    // }
 
     // Business logic: Create expense
     const expense = await this.expenseRepository.create({
       userId: input.userId,
       category: input.category,
-      amount: input.amount,
-      description: input.description,
+      amount: input.amount.toString(),
       createdAt: new Date()
     });
 

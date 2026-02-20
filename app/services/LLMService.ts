@@ -13,6 +13,15 @@ export interface LLMService {
   parseIntent(userMessage: string): Promise<LLMIntent>;
 }
 
+interface OpenRouterResponse {
+  choices?: Array<{ message: { content: string } }>;
+}
+
+interface ParsedLLMResponse {
+  intent?: string;
+  entities?: Record<string, unknown>;
+}
+
 export class OpenRouterLLMService implements LLMService {
   private readonly endpoint: string;
   private readonly apiKey: string;
@@ -78,7 +87,7 @@ export class OpenRouterLLMService implements LLMService {
     JSON Response:`;
   }
 
-  private async callAPI(prompt: string): Promise<any> {
+  private async callAPI(prompt: string): Promise<OpenRouterResponse> {
     try {
       const response = await fetch(this.endpoint, {
         method: 'POST',
@@ -101,24 +110,24 @@ export class OpenRouterLLMService implements LLMService {
         throw new Error(`LLM API failed with status: ${response.status}`);
       }
 
-      return await response.json();
-    } catch (error) {
-      throw new Error(`LLM API failed with status: ${error}`, { cause: error });
+      return await response.json() as OpenRouterResponse;
+    } catch (_error) {
+      throw new Error(`LLM API failed with status: ${_error}`, { cause: _error });
     }
   }
 
-  private parseResponse(response: any): LLMIntent {
+  private parseResponse(response: OpenRouterResponse): LLMIntent {
     try {
       // Extract content from OpenRouter response format
       const content = response.choices?.[0]?.message?.content || '';
-      const parsed = JSON.parse(content);
+      const parsed = JSON.parse(content) as ParsedLLMResponse;
 
       return {
-        type: parsed.intent || 'unknown_intent',
-        entities: parsed.entities || {},
+        type: (parsed.intent || 'unknown_intent') as LLMIntent['type'],
+        entities: (parsed.entities || {}) as LLMIntent['entities'],
         confidence: this.calculateConfidence(parsed)
       };
-    } catch (error) {
+    } catch (_error) {
       // Fallback for parsing errors
       return {
         type: 'unknown_intent',
@@ -128,7 +137,7 @@ export class OpenRouterLLMService implements LLMService {
     }
   }
 
-  private calculateConfidence(parsed: any): number {
+  private calculateConfidence(parsed: ParsedLLMResponse): number {
     // Simple confidence calculation based on completeness
     if (!parsed.intent) return 0;
     if (parsed.intent === 'unknown_intent') return 0.1;

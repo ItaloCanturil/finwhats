@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ListProps {
@@ -7,21 +7,21 @@ interface ListProps {
   as?: 'ul' | 'ol' | 'div'
   variant?: 'default' | 'navigation' | 'horizontal'
   className?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface ListItemProps {
   children: ReactNode
   className?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
-const List = ({ 
-  children, 
-  as: Component = 'div', 
+const List = ({
+  children,
+  as: Component = 'div',
   variant = 'default',
   className = '',
-  ...props 
+  ...props
 }: ListProps) => {
   const baseClasses = 'flex'
   const variantClasses = {
@@ -36,7 +36,7 @@ const List = ({
     className
   )
 
-  const ElementComponent = Component as any;
+  const ElementComponent = Component as React.ElementType;
 
   return (
     <ElementComponent className={combinedClasses} {...props}>

@@ -37,15 +37,16 @@ const tools = [
     },
 ];
 
-const functions: Record<string, Function> = {
-    addExpense,
-    removeExpense,
-    getExpenses,
+type DispatchFn = (arg: unknown) => Promise<unknown>;
+const functions: Record<string, DispatchFn> = {
+    addExpense: addExpense as DispatchFn,
+    removeExpense: removeExpense as DispatchFn,
+    getExpenses: getExpenses as DispatchFn,
 };
 
 export async function runAgent(message: string) {
     const chat = model.startChat({
-        // @ts-ignore
+        // @ts-expect-error – tools typing is not perfectly aligned with SDK generics
         tools: tools,
     });
 

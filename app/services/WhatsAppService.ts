@@ -51,7 +51,7 @@ export class EvolutionWhatsAppService implements WhatsAppService {
       : 'https';
   }
 
-  private async makeRequest(protocol: string, phoneNumber: string, message: string): Promise<any> {
+  private async makeRequest(protocol: string, phoneNumber: string, message: string): Promise<{ messageId?: string }> {
     const response = await fetch(
       `${protocol}://${this.baseUrl}/message/sendText/${this.instance}`,
       {
