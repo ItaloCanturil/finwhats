@@ -64,10 +64,10 @@ export default async function Dashboard() {
 	const monthlyData = aggregateMonthlyData(transactions);
 
 	return (
-		<div className="flex h-screen bg-gray-50">
+		<div className="flex h-screen bg-gray-50 flex-col md:flex-row overflow-hidden">
 			<Sidebar />
-			<main className="flex-1 p-8 overflow-y-auto">
-				<div className="flex items-center justify-between mb-6">
+			<main className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 					<h1 className="text-2xl font-bold text-gray-800">
 						Financial Overview
 					</h1>
