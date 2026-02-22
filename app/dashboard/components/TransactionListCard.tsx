@@ -197,7 +197,7 @@ export function TransactionListCard({ transactions }: TransactionListCardProps) 
         }).format(best.amount);
 
         return {
-            type: activeType,
+            type: activeType === "income" ? "receitas" : "despesas",
             label: best.label,
             amount: formattedAmount,
         };
@@ -232,15 +232,15 @@ export function TransactionListCard({ transactions }: TransactionListCardProps) 
     };
 
     const filterButtons: { label: string; value: FilterType }[] = [
-        { label: "All", value: "all" },
-        { label: "Income", value: "income" },
-        { label: "Expense", value: "expense" },
+        { label: "Todas", value: "all" },
+        { label: "Receitas", value: "income" },
+        { label: "Despesas", value: "expense" },
     ];
 
     const periodButtons: { label: string; value: PeriodType }[] = [
-        { label: "Week", value: "week" },
-        { label: "Month", value: "month" },
-        { label: "Year", value: "year" },
+        { label: "Semana", value: "week" },
+        { label: "Mês", value: "month" },
+        { label: "Ano", value: "year" },
     ];
 
     return (
@@ -249,7 +249,7 @@ export function TransactionListCard({ transactions }: TransactionListCardProps) 
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg font-semibold flex items-center gap-2">
                         <FilterIcon className="size-4 text-muted-foreground" />
-                        Transactions
+                        Transações
                     </CardTitle>
                     {/* Period selector */}
                     <div className="flex gap-1">
@@ -312,7 +312,7 @@ export function TransactionListCard({ transactions }: TransactionListCardProps) 
                     <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground bg-gray-50 rounded-md px-2.5 py-1.5">
                         <TrendingUpIcon className="size-3" />
                         <span>
-                            Highest {insight.type} month:{" "}
+                            Mês com maior {insight.type}:{" "}
                             <span className="font-semibold capitalize">
                                 {insight.label}
                             </span>{" "}
@@ -325,11 +325,11 @@ export function TransactionListCard({ transactions }: TransactionListCardProps) 
                 {filtered.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
                         <InboxIcon className="size-10 mb-3 opacity-40" />
-                        <p className="text-sm font-medium">No transactions found</p>
+                        <p className="text-sm font-medium">Nenhuma transação encontrada</p>
                         <p className="text-xs mt-1">
                             {filter === "all"
-                                ? "No transactions for this period."
-                                : `No ${filter} records for this period.`}
+                                ? "Nenhuma transação neste período."
+                                : `Nenhum registro de ${filter === "income" ? "receitas" : "despesas"} neste período.`}
                         </p>
                     </div>
                 ) : (
@@ -379,7 +379,7 @@ export function TransactionListCard({ transactions }: TransactionListCardProps) 
                                                     className="text-[10px] px-1.5 py-0 gap-0.5"
                                                 >
                                                     <RepeatIcon className="size-2.5" />
-                                                    Subscription
+                                                    Assinatura
                                                 </Badge>
                                             )}
                                             {transaction.recurrence_type === "installment" &&

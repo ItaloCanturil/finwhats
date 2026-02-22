@@ -15,7 +15,7 @@ interface GraphProps {
 export function ExpenseGraph({ data }: GraphProps) {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Monthly Expenses</h2>
+      <h2 className="text-xl font-semibold mb-4">Despesas Mensais</h2>
       {data.length === 0 ? (
         <div className="h-[300px]">
           <EmptyChartState />

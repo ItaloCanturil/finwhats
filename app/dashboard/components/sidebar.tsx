@@ -23,10 +23,10 @@ const Sidebar = () => {
 	};
 
 	const menuItems = [
-		{ name: "Dashboard", icon: <LayoutDashboard size={20} /> },
-		{ name: "Analytics", icon: <BarChart2 size={20} />, alert: 20 },
-		{ name: "Transactions", icon: <ArrowRightLeft size={20} /> },
-		{ name: "Invoices", icon: <FileText size={20} /> },
+		{ name: "Painel", icon: <LayoutDashboard size={20} /> },
+		{ name: "Análises", icon: <BarChart2 size={20} />, alert: 20 },
+		{ name: "Transações", icon: <ArrowRightLeft size={20} /> },
+		{ name: "Faturas", icon: <FileText size={20} /> },
 	];
 	return (
 		<>
@@ -41,7 +41,7 @@ const Sidebar = () => {
 				<button
 					className="p-2 bg-gray-100 rounded-md text-gray-700 hover:bg-gray-200 transition-colors"
 					onClick={() => setIsOpen(!isOpen)}
-					aria-label="Toggle Menu"
+					aria-label="Alternar Menu"
 				>
 					{isOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
@@ -70,7 +70,7 @@ const Sidebar = () => {
 					/>
 					<input
 						type="text"
-						placeholder="Search"
+						placeholder="Buscar"
 						className="w-full p-2 pl-10 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
 					/>
 				</div>

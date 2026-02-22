@@ -9,11 +9,11 @@ import { Bar, BarChart } from "recharts";
 
 const chartConfig = {
     income: {
-        label: "Income",
+        label: "Receita",
         color: "#10b981",
     },
     expense: {
-        label: "Expense",
+        label: "Despesa",
         color: "#f43f5e",
     },
 } satisfies ChartConfig;
@@ -47,7 +47,7 @@ export function OverviewCards({ income, expense, balance, monthlyData }: Overvie
             <Card className="hover:shadow-md transition-shadow duration-300">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Total Income
+                        Total de Receitas
                     </CardTitle>
                     <div className="p-2 bg-emerald-100 rounded-full">
                         <ArrowUpIcon className="w-4 h-4 text-emerald-600" />
@@ -74,7 +74,7 @@ export function OverviewCards({ income, expense, balance, monthlyData }: Overvie
             <Card className="hover:shadow-md transition-shadow duration-300">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Total Expense
+                        Total de Despesas
                     </CardTitle>
                     <div className="p-2 bg-rose-100 rounded-full">
                         <ArrowDownIcon className="w-4 h-4 text-rose-600" />
@@ -101,7 +101,7 @@ export function OverviewCards({ income, expense, balance, monthlyData }: Overvie
             <Card className="bg-slate-900 border-slate-800 text-white hover:shadow-xl transition-shadow duration-300">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-slate-400">
-                        Total Balance
+                        Saldo Total
                     </CardTitle>
                     <div className="p-2 bg-slate-800 rounded-full">
                         <DollarSignIcon className="w-4 h-4 text-white" />

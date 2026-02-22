@@ -9,8 +9,8 @@ function aggregateMonthlyData(
 	transactions: { type: "income" | "expense"; amount: string; reference_month: string }[]
 ): MonthlyChartData[] {
 	const monthLabels = [
-		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+		"Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+		"Jul", "Ago", "Set", "Out", "Nov", "Dez",
 	] as const;
 
 	const monthMap = new Map<string, { income: number; expense: number; sortKey: number }>();
@@ -69,7 +69,7 @@ export default async function Dashboard() {
 			<main className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 					<h1 className="text-2xl font-bold text-gray-800">
-						Financial Overview
+						Visão Geral
 					</h1>
 					<TransactionModal />
 				</div>

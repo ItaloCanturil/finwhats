@@ -24,24 +24,24 @@ import { PlusIcon, Loader2Icon } from "lucide-react";
 import { addTransaction } from "@/actions/transaction";
 
 const INCOME_CATEGORIES = [
-    "Salary",
+    "Salário",
     "Freelance",
-    "Investments",
-    "Rental",
-    "Business",
-    "Other",
+    "Investimentos",
+    "Aluguel",
+    "Negócios",
+    "Outro",
 ] as const;
 
 const EXPENSE_CATEGORIES = [
-    "Food",
-    "Housing",
-    "Transportation",
-    "Utilities",
-    "Entertainment",
-    "Healthcare",
-    "Education",
-    "Shopping",
-    "Other",
+    "Alimentação",
+    "Moradia",
+    "Transporte",
+    "Utilidades",
+    "Entretenimento",
+    "Saúde",
+    "Educação",
+    "Compras",
+    "Outro",
 ] as const;
 
 type TransactionType = "income" | "expense";
@@ -119,9 +119,9 @@ export function TransactionModal() {
     };
 
     const recurrenceButtons: { label: string; value: RecurrenceType }[] = [
-        { label: "None", value: "none" },
-        { label: "Subscription", value: "subscription" },
-        { label: "Installment", value: "installment" },
+        { label: "Nenhuma", value: "none" },
+        { label: "Assinatura", value: "subscription" },
+        { label: "Parcelamento", value: "installment" },
     ];
 
     const isSubmitDisabled =
@@ -136,14 +136,14 @@ export function TransactionModal() {
             <DialogTrigger asChild>
                 <Button className="gap-2">
                     <PlusIcon className="size-4" />
-                    Add Transaction
+                    Nova Transação
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>New Transaction</DialogTitle>
+                    <DialogTitle>Nova Transação</DialogTitle>
                     <DialogDescription>
-                        Add a new income or expense to your records.
+                        Adicione uma nova receita ou despesa aos seus registros.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -162,7 +162,7 @@ export function TransactionModal() {
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 }`}
                         >
-                            Income
+                            Receita
                         </button>
                         <button
                             type="button"
@@ -175,13 +175,13 @@ export function TransactionModal() {
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 }`}
                         >
-                            Expense
+                            Despesa
                         </button>
                     </div>
 
                     {/* Month Picker */}
                     <div className="space-y-2">
-                        <Label htmlFor="month">Month</Label>
+                        <Label htmlFor="month">Mês</Label>
                         <Input
                             id="month"
                             type="month"
@@ -193,11 +193,11 @@ export function TransactionModal() {
 
                     {/* Description */}
                     <div className="space-y-2">
-                        <Label htmlFor="description">Description</Label>
+                        <Label htmlFor="description">Descrição</Label>
                         <Input
                             id="description"
                             type="text"
-                            placeholder="e.g. Monthly salary"
+                            placeholder="ex: Salário mensal"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
@@ -205,10 +205,10 @@ export function TransactionModal() {
 
                     {/* Category */}
                     <div className="space-y-2">
-                        <Label htmlFor="category">Category</Label>
+                        <Label htmlFor="category">Categoria</Label>
                         <Select value={category} onValueChange={setCategory}>
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a category" />
+                                <SelectValue placeholder="Selecione uma categoria" />
                             </SelectTrigger>
                             <SelectContent>
                                 {categories.map((cat) => (
@@ -223,7 +223,7 @@ export function TransactionModal() {
                     {/* Recurrence Type */}
                     {type === "expense" && (
                         <div className="space-y-2">
-                            <Label>Recurrence</Label>
+                            <Label>Recorrência</Label>
                             <div className="flex gap-1">
                                 {recurrenceButtons.map((btn) => (
                                     <button
@@ -247,13 +247,13 @@ export function TransactionModal() {
                         <div className="flex gap-3">
                             <div className="flex-1 space-y-2">
                                 <Label htmlFor="installmentCurrent">
-                                    Current installment
+                                    Parcela atual
                                 </Label>
                                 <Input
                                     id="installmentCurrent"
                                     type="number"
                                     min="1"
-                                    placeholder="e.g. 3"
+                                    placeholder="ex: 3"
                                     value={installmentCurrent}
                                     onChange={(e) =>
                                         setInstallmentCurrent(e.target.value)
@@ -263,13 +263,13 @@ export function TransactionModal() {
                             </div>
                             <div className="flex-1 space-y-2">
                                 <Label htmlFor="installmentTotal">
-                                    Total installments
+                                    Total de parcelas
                                 </Label>
                                 <Input
                                     id="installmentTotal"
                                     type="number"
                                     min="1"
-                                    placeholder="e.g. 10"
+                                    placeholder="ex: 10"
                                     value={installmentTotal}
                                     onChange={(e) =>
                                         setInstallmentTotal(e.target.value)
@@ -282,7 +282,7 @@ export function TransactionModal() {
 
                     {/* Amount */}
                     <div className="space-y-2">
-                        <Label htmlFor="amount">Amount (R$)</Label>
+                        <Label htmlFor="amount">Valor (R$)</Label>
                         <Input
                             id="amount"
                             type="number"
@@ -301,7 +301,7 @@ export function TransactionModal() {
                             variant="outline"
                             onClick={() => setOpen(false)}
                         >
-                            Cancel
+                            Cancelar
                         </Button>
                         <Button
                             type="submit"
@@ -315,10 +315,10 @@ export function TransactionModal() {
                             {isPending ? (
                                 <>
                                     <Loader2Icon className="size-4 animate-spin" />
-                                    Saving...
+                                    Salvando...
                                 </>
                             ) : (
-                                `Add ${type === "income" ? "Income" : "Expense"}`
+                                `Adicionar ${type === "income" ? "Receita" : "Despesa"}`
                             )}
                         </Button>
                     </DialogFooter>
