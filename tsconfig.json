@@ -34,16 +34,13 @@
 				"./app/components/*"
 			],
 			"@/lib/*": [
-				"./lib/*",
-				"./app/_lib/*"
+				"./lib/*"
 			],
 			"@/db/*": [
-				"./lib/db/*",
-				"./app/_db/*"
+				"./lib/db/*"
 			],
 			"@/db": [
-				"./lib/db",
-				"./app/_db"
+				"./lib/db"
 			],
 			"@/services/*": [
 				"./app/services/*"
