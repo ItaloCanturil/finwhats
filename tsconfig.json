@@ -24,13 +24,17 @@
 		],
 		"baseUrl": ".",
 		"paths": {
-			"@/*": [
-				"./app/*"
+			"@/features/*": [
+				"./features/*"
+			],
+			"@/schemas/*": [
+				"./schemas/*"
 			],
 			"@/components/*": [
 				"./app/components/*"
 			],
 			"@/lib/*": [
+				"./lib/*",
 				"./app/_lib/*"
 			],
 			"@/db/*": [
@@ -41,6 +45,9 @@
 			],
 			"@/services/*": [
 				"./app/services/*"
+			],
+			"@/*": [
+				"./app/*"
 			]
 		}
 	},
