@@ -1,4 +1,4 @@
-import { runAgent } from "../app/_lib/agent";
+import { runAgent } from "../lib/ai/agent";
 
 // Mock Gemini client
 const mockSendMessage = jest.fn();
@@ -6,20 +6,16 @@ const mockStartChat = jest.fn().mockReturnValue({
     sendMessage: mockSendMessage,
 });
 
-jest.mock("../app/_lib/gemini", () => ({
+jest.mock("../lib/ai/gemini", () => ({
     model: {
         startChat: mockStartChat,
     },
 }));
 
 // Mock actions
-jest.mock("../app/_actions/expense/add", () => ({
+jest.mock("../features/expense/actions", () => ({
     addExpense: jest.fn().mockResolvedValue(undefined),
-}));
-jest.mock("../app/_actions/expense/remove", () => ({
     removeExpense: jest.fn().mockResolvedValue(undefined),
-}));
-jest.mock("../app/_actions/expense/get", () => ({
     getExpenses: jest.fn().mockResolvedValue([{ category: "food", amount: 10 }]),
 }));
 
@@ -59,7 +55,7 @@ describe("Agent", () => {
 
         const result = await runAgent("Add expense");
 
-        const { addExpense } = require("../app/_actions/expense/add");
+        const { addExpense } = require("../features/expense/actions");
         expect(addExpense).toHaveBeenCalledWith({ category: "food", amount: 50 });
         expect(result).toBe("Expense added");
     });

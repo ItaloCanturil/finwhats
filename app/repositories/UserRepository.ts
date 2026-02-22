@@ -1,7 +1,7 @@
-import { user } from "@/_db/schema";
+import { user } from "@/db/schema";
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
-import defaultDb from "@/_db/drizzle";
+import db from "@/db";
 import { eq, or } from "drizzle-orm";
 
 // Infer types from Drizzle schema
@@ -26,10 +26,12 @@ type Database = PostgresJsDatabase<{
 }>
 
 export class DrizzleUserRepository implements UserRepository {
-  constructor(private db: Database = defaultDb as unknown as Database) { }
+  constructor(private database: PostgresJsDatabase<any> = db) {
+    // Used injected db or fallback
+  }
 
   async create(userData: CreateUserData): Promise<User> {
-    const [created] = await this.db
+    const [created] = await this.database
       .insert(user)
       .values({
         id: userData.id,
@@ -46,7 +48,7 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    const [result] = await this.db
+    const [result] = await this.database
       .select()
       .from(user)
       .where(eq(user.id, id))
@@ -56,7 +58,7 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async findByUserId(userId: string): Promise<User | null> {
-    const [result] = await this.db
+    const [result] = await this.database
       .select()
       .from(user)
       .where(eq(user.id, userId))
@@ -66,7 +68,7 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const [result] = await this.db
+    const [result] = await this.database
       .select()
       .from(user)
       .where(eq(user.email, email))
@@ -76,7 +78,7 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async findByPhone(phone: string): Promise<User | null> {
-    const [result] = await this.db
+    const [result] = await this.database
       .select()
       .from(user)
       .where(eq(user.phone, phone))
@@ -86,7 +88,7 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async findByEmailOrPhone(emailOrPhone: string): Promise<User | null> {
-    const [result] = await this.db
+    const [result] = await this.database
       .select()
       .from(user)
       .where(
@@ -113,7 +115,7 @@ export class DrizzleUserRepository implements UserRepository {
       }
     });
 
-    const [updated] = await this.db
+    const [updated] = await this.database
       .update(user)
       .set(updateData)
       .where(eq(user.id, id))
@@ -123,13 +125,13 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.db
+    await this.database
       .delete(user)
       .where(eq(user.id, id));
   }
 
   async verifyEmail(userId: string): Promise<void> {
-    await this.db
+    await this.database
       .update(user)
       .set({
         emailVerified: true,

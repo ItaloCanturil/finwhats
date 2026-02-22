@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusIcon, Loader2Icon } from "lucide-react";
-import { addTransaction } from "@/actions/transaction";
+import { addTransaction } from "@/features/transactions/actions";
 
 const INCOME_CATEGORIES = [
     "Salário",

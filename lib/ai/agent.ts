@@ -1,7 +1,5 @@
-import { model } from "@/_lib/gemini";
-import { addExpense } from "@/_actions/expense/add";
-import { removeExpense } from "@/_actions/expense/remove";
-import { getExpenses } from "@/_actions/expense/get";
+import { model } from "@/lib/ai/gemini";
+import { addExpense, removeExpense, getExpenses } from "@/features/expense/actions";
 
 const tools = [
     {

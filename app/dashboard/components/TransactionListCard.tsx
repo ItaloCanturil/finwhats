@@ -17,7 +17,7 @@ import {
     CreditCardIcon,
     TrendingUpIcon,
 } from "lucide-react";
-import { removeTransaction } from "@/actions/transaction";
+import { removeTransaction } from "@/features/transactions/actions";
 
 type TransactionType = "income" | "expense";
 type RecurrenceType = "none" | "subscription" | "installment";

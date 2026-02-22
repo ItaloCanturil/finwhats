@@ -1,4 +1,4 @@
-import { runAgent } from "@/_lib/agent";
+import { runAgent } from "@/lib/ai/agent";
 import { NextResponse } from "next/server";
 import { auth } from "../../../auth";
 

@@ -1,6 +1,6 @@
 import { auth } from "../../../../auth";
 import { toNextJsHandler } from "better-auth/next-js";
-import { authRateLimiter } from "@/_lib/rate-limit";
+import { authRateLimiter } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 
 const { GET: authGET, POST: authPOST } = toNextJsHandler(auth);

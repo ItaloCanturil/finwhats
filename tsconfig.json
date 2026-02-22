@@ -38,10 +38,12 @@
 				"./app/_lib/*"
 			],
 			"@/db/*": [
+				"./lib/db/*",
 				"./app/_db/*"
 			],
-			"@/actions/*": [
-				"./app/_actions/*"
+			"@/db": [
+				"./lib/db",
+				"./app/_db"
 			],
 			"@/services/*": [
 				"./app/services/*"

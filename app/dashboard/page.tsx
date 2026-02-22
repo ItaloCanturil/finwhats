@@ -2,7 +2,7 @@ import Sidebar from "./components/sidebar";
 import { OverviewCards } from "./components/OverviewCards";
 import { TransactionModal } from "./components/TransactionModal";
 import { TransactionListCard } from "./components/TransactionListCard";
-import { getTransactions } from "@/actions/transaction";
+import { getTransactions } from "@/features/transactions/actions";
 import { aggregateMonthlyData } from "@/features/transactions/service";
 
 export default async function Dashboard() {

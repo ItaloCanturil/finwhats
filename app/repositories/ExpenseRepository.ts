@@ -1,4 +1,5 @@
-import { expenseTable } from "@/_db/schema";
+import db from "@/db";
+import { expenseTable } from "@/db/schema";
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
